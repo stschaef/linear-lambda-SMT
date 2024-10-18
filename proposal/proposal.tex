@@ -1,0 +1,129 @@
+% -*- fill-column: 80; -*-
+\documentclass{article}
+\usepackage[margin=1in, footskip=0.25in]{geometry}
+\usepackage{mathpartir}
+\usepackage{tikz-cd}
+\usepackage{todonotes}
+\usepackage{lipsum}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{stmaryrd}
+
+\begin{document}
+
+\pagestyle{plain}
+
+\pagebreak
+
+\title{Proof Search in a Linear and Inuitionistic Calculus}
+
+\author{Serra Dane \\ \textit{sdane@umich.edu} \and Bryan Li \\
+  \textit{bryli@umich.edu} \and Steven Schaefer \\ \textit{stschaef@umich.edu}}
+
+\maketitle
+
+\section{Proposed Project Task}
+Intuitionistic logic provides a weaker notion of truth than classical logic.
+In a classical setting, if a statement is not false we may deduce that it is
+true; however, in an intuitionistic calculus, theorems must be supported by a
+constructive proof. It is perhaps surprising that SMT solvers --- which leverage
+classical reasoning --- may be used to derive proof trees in intutionsitic
+propositional logic, as seen in \cite{claessen2015sat}. In a similar fashion, we propose
+using SAT/SMT-based techniques to generate proof trees in intuitionistic and
+\emph{substructural} $\lambda$-calculi.
+
+By limiting the means by which
+derivations may interface with the context, substructural logics --- e.g.\
+linear, affine, relevance, separation --- offer a richer notion of judgement. In
+the field of computer science, this is most often used for a
+\emph{resource-sensitive} point of view. For instance, one may logically model resources that are consumed upon usage, which is of particular use for modelling
+the flow of quantum programming language. Similarly, one may use a substructural
+type system to model memory, which offers the expressivity to prove memory
+safety theorems for a programming language. Out of all the choices of substructural type systems, we are primarily
+interested in a \emph{linear} and \emph{ordered} setting. This is because of an
+ongoing research project by Steven that is building a domain-specific language for formal grammar and parsing theory
+inside of an order, linear, intutionistic, and dependent type system. If we
+successfully implement a proof search procedure for linear, orderded, intutionistic
+propositional logic, then we can plug and play it with this language for
+grammars to get a rudimentary parsing procedure.
+
+\todo{TODO: These strings of adjectives ``linear, ordered, blah blah blah'' are long
+  and sound awkward}
+
+\section{Prior Work}
+As suggested above, in
+\cite{claessen2015sat} Claessen and Rosen provide a tool \texttt{intuit} that extracts proof trees in intuitionistic propositional
+logic (IPL) from an SMT solver. Later, in \cite{fiorentini2019proof}, Fiorentini et al.\ give a proof-theoretic
+interpretation of \texttt{intuit}. This analysis demonstrates that the SMT-based approach
+of \texttt{intuit} is effectively the same as a simple backwards, goal-directed
+proof search through IPL sequents. This correspondence is consistent with the
+work of Farooque et al.\ in \cite{farooque2013bisimulation}, in which they
+demonstrate a bisimulation between DPLL($\mathcal{T}$) and proof search in a
+focused sequent calculus. These prior works provide some inspiration for where
+we may begin when using SAT/SMT to search for proof trees in the linear sequent
+calculus.
+
+There is additionally some prior work in automated theorem proving for linear
+logic. In particular,  both coming from Valeria de Paiva's lab: in
+\cite{tarau2020deriving}, Tarau and de
+Paiva implement an automated theorem prover for linear logic in Prolog; and, in
+\cite{DBLP:journals/corr/abs-1904-06850}, Olarte et al.\ provide ILLTP a library
+of benchmarks for linear logic theorem proving. Each of these works offer a
+starting point for evaluation of tool.
+
+\section{Proposed Approach}
+\todo{Definitely rewrite this section}
+The exact approach is unclear. At first glance, we may hope to employ similar
+tricks to \cite{claessen2015sat} to clausally encode intuitionstic formulae. In
+this vein, we may also wish to incorporate the work of Fiorentini and Ferrari,
+where in \cite{fiorentini2024general} they give a more general structure for
+clausally encode terms for IPL proof search via SAT.
+
+We need to come up with a way to clausally encode the substructural restrctions natively.
+Or, in response to a question Yatin asked, we may also be able to leverage
+existing tools and then filter out the ones that obey our linearity
+restrictions. What follows next is just vibes, but this probably wouldn't work:
+post-hoc filtering like this likely would not scale. However, there may be an
+approach where you do a CEGAR-like thing --- you don't a priori impose a linear
+restriction, and then you iteratively refine until you have one? Idk we need to
+think about this bit more. I think encoding the substructural restrctions more
+natively would be preferable, as this falls in line with the ethos that type
+systems should make ``bad terms'' internally unexpressible
+
+\section{Deliverables}
+Some sort of automated decison procedure
+
+\section{Proposed Schedule}
+No idea. We should probably try our best to decouple the different sorts of
+substructural restrictions. That is, we shouldn't overfit to just a linear and
+ordered setting. It's likely best to try to modularly add each structural
+rule/lack thereof. Linear logic is general enough that we would want to be able
+to tailor the solver to each application of it, if possible.
+
+We are focusing on
+linearity/orderness, but it's probably worth investigating affine/relevance
+logics too. That is, we can potentially model each structural rule modularly
+
+Because the substructural bit is the most interesting contribution, it's probably worth
+investigating the classical fragments of these as well as the intuitionistic ones.
+
+This last bit is more self-serving, but if we are overfitting to the
+linear/ordered setting, then perhaps we could incorporate more type connectives
+from the grammars type theory. In this fashion, the application of
+proof-search-for-parsing that we'd get at the
+end would be more compelling, and provide a more useful tool when viewed as a
+tactic in that language. The most important aspect here would be abstracting
+over all strings in the input context, although this is a big ask and perhaps
+very hard.
+
+\todo{This last bit is pretty unclear if you don't already know about the type
+  theory I'm referring to. I can clarify these bits when we talk in person}
+
+\bibliographystyle{plain}
+\bibliography{refs.bib}
+
+\end{document}
