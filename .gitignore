@@ -6,3 +6,4 @@
 *.auctex-auto
 *.blg
 *.bbl
+*.pyc

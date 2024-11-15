@@ -17,10 +17,17 @@ trpl_neg = lambda a : neg(dbl_neg(a))
 dbl_neg_lem = lambda a : dbl_neg(lem(a))
 dbl_neg_gen_lem = lambda a , b : Implies(Implies(Or(a, Implies(a , b)), b), b)
 
+# coproduct univ prop
+case_fwd = lambda a, b : Implies(Implies(Or(a, b) , c), And(Implies(a, c), Implies(b , c)))
+case_rev = lambda a, b : Implies(And(Implies(a, c), Implies(b , c)), Implies(Or(a, b) , c))
+
+prod_univ_prop_fwd = lambda a, b, c : Implies(Implies(a, And(b , c)), And(Implies(a , c), Implies(a, c)))
+prod_univ_prop_rev = lambda a, b, c : Implies(And(Implies(a , c), Implies(b, c)), Implies(a, And(b , c)))
+
 curry = lambda a, b, c : Implies(Implies(a, Implies(b, c)), Implies(And(a , b), c))
 uncurry = lambda a, b, c : Implies(Implies(And(a , b), c), Implies(a, Implies(b, c)))
 
-pierce = lambda x, y : Implies(Implies(Implies(x , y), x), x)
+pierce = lambda a, b : Implies(Implies(Implies(a , b), a), a)
 
 pierce_to_lem = lambda a , b : Implies(lem(a), pierce(a, b))
 lem_to_pierce = lambda a , b : Implies(pierce(a, b), lem(a))

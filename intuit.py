@@ -1,4 +1,6 @@
 from z3 import *
+from test import *
+
 s = Solver()
 def satProve(s, A, q):
     """
@@ -34,7 +36,7 @@ def intuitCheck(s, X, M):
         if is_true(a_val) or is_true(b_val) or is_true(c_val):
             continue  # Skip this implication clause
         else:
-            # Build the set of assumptions A = M ∪ {a}
+            # Build the set of assumptions A = M \cup {a}
             A = set()
             print(M)
             for d in M.decls():
@@ -55,7 +57,7 @@ def intuitCheck(s, X, M):
                 # Remove 'a' from A_prime to get assumptions used
                 assumptions_used = set(A_prime)
                 assumptions_used.discard(a)
-                # Create new flat clause (assumptions_used) → c
+                # Create new flat clause (assumptions_used) \to c
                 if len(assumptions_used) == 0:
                     new_clause = c  # Implies(True, c) simplifies to c
                 else:
@@ -92,7 +94,7 @@ def prove(R, X, q):
     # Add all flat clauses to the solver
     for r in R:
         s.add(r)
-    # For each implication clause (a → b) → c, add the flat clause b → c
+    # For each implication clause (a \to b) \to c, add the flat clause b \to c
     for (a, b, c) in X:
         s.add(Implies(b, c))
     print(s)
@@ -110,16 +112,20 @@ if __name__ == "__main__":
     a = Bool('a')
     b = Bool('b')
     c = Bool('c')
-    p = Bool('p')  
+    d = Bool('d')
+    e = Bool('e')
+    f = Bool('f')
+    g = Bool('g')
+
+    p = Bool('p')
+
     q_atom = Bool('q_atom')  
     r = Bool('r')
     s_atom = Bool('s')  
 
     # Flat clauses R
     R = [
-        Implies(a, b),  
-        a,
-        Implies(b,c)
+      dbl_neg(a)
     ]
 
     # Implication clauses X
