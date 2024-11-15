@@ -1,4 +1,5 @@
 from z3 import *
+from test import *
 from warnings import warn
 
 def clausify(A):
@@ -179,6 +180,11 @@ def is_implication_clause(A):
 
 if __name__ == "__main__":
     p, q, r, s, t = FreshBool(), FreshBool(), FreshBool(), FreshBool(), FreshBool()
-    formula = Implies(Implies(Or(p, q), r), And(s, t))
+    formula = prod_univ_prop_fwd(p,q,r)
     clausified = clausify(formula)
     print(clausified)
+
+    solver = Solver()
+    solver.add(formula == clausified)
+    solver.add(Not(And(Implies(formula, clausified), Implies(clausified, formula))))
+    print(solver.check())
