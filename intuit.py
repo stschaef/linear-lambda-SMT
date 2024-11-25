@@ -249,7 +249,7 @@ if __name__ == "__main__":
 
 
 
-    formula = clausify.instantiateLambda(weak)
+    formula = clausify.instantiateLambda(neg)
 
     # Flat clauses R
     # R = [
@@ -268,8 +268,8 @@ if __name__ == "__main__":
     print("A", formula)
     print("R", R)
     print("X", X)
-    # X = clausify.formatX(X)
-    # print("formatted X", X)
+    X = clausify.formatX(X)
+    print("formatted X", X)
     print("q", q)
     # Run the prove function
     result = prove(R, X, q)

@@ -136,7 +136,7 @@ def transform(formula, R, X):
             A = a
         if not is_atom(B):
             b = FreshBool()
-            transform(Implies(b, B), R, X)
+            transform(Implies(B, b), R, X)
             B = b
         if not is_atom(right):
             c = FreshBool()

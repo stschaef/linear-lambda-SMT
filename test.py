@@ -100,10 +100,12 @@ big_curry = lambda a, b, c, d, e : \
       e
   )
 
-# TODO add all lambdas to this list
 lambdas = \
   [
     ["neg", neg, False],
+    ["sym_conj", sym_conj, True],
+    ["sym_disj", sym_disj, True],
+    ["conj_to_disj", conj_to_disj, True],
     ["dbl_neg", dbl_neg, False],
     ["dbl_neg_gen", dbl_neg_gen, False],
     ["lem", lem, False],
@@ -157,8 +159,8 @@ if __name__ == '__main__':
         clausify_test = ClausifyTestGen(t[1])
         setattr(ClausifyTests, clausify_test_name, clausify_test)
 
-        provability_test_name = 'test_%s' % t[0]
-        formula = clausify.instantiateLambda(t[1])
-        R, X, goal = clausify.RXGoal(formula)
-        provability_test = ProvabilityTestGen(R, X, goal, t[2])
+        # provability_test_name = 'test_%s' % t[0]
+        # formula = clausify.instantiateLambda(t[1])
+        # R, X, goal = clausify.RXGoal(formula)
+        # provability_test = ProvabilityTestGen(R, X, goal, t[2])
     unittest.main()
