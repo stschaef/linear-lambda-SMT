@@ -68,7 +68,8 @@ def transform(formula, R, X):
     if is_implication_clause(formula):
         X.append(formula)
         return
-    
+
+
     if not is_implies(formula):
         raise Exception("Not an implication clause: " + str(formula))
     
@@ -184,7 +185,8 @@ def is_implication_clause(A):
     return is_atom(a) and is_atom(b)
 
 def instantiateLambda(lam):
-    vars = [FreshBool() for i in range(10)]
+    import string
+    vars = [Bool(i) for i in list(string.ascii_lowercase)]
     arg_count = lam.__code__.co_argcount
     return lam(*(vars[:arg_count]))
 
@@ -195,6 +197,15 @@ def isEquivToClausified(lam):
     solver.add(formula == clausified)
     solver.add(Not(And(Implies(formula, clausified), Implies(clausified, formula))))
     return(solver.check())
+
+def format_implication_clause(x):
+    assert(is_implication_clause(x))
+    imp, c = get_children(x)
+    a, b = get_children(imp)
+    return a, b, c
+
+def formatX(X):
+    return list(map(format_implication_clause, X))
 
 
 if __name__ == "__main__":
