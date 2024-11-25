@@ -127,8 +127,8 @@ def satProve(solver, A, q):
     assumptions = list(A) + [Not(q)]
     res = s.check(assumptions)
     if res == unsat:
-        proof = None
-        # proof = s.proof()
+        # proof = None
+        proof = s.proof()
         core = s.unsat_core()
         # Remove Not(q) from the core to get the assumptions actually used
         core_without_q = [a for a in core if not (eq(a, Not(q)))]
@@ -249,7 +249,7 @@ if __name__ == "__main__":
 
 
 
-    formula = clausify.instantiateLambda(neg)
+    formula = clausify.instantiateLambda(dbl_neg)
 
     # Flat clauses R
     # R = [

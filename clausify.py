@@ -71,7 +71,9 @@ def transform(formula, R, X):
 
 
     if not is_implies(formula):
-        raise Exception("Not an implication clause: " + str(formula))
+        transform(Implies(True, formula), R, X)
+        return
+        # raise Exception("Not an implication clause: " + str(formula))
     
     left, right = get_children(formula)
 
