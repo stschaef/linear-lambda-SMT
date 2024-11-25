@@ -45,6 +45,7 @@ def format_proof_goal(A):
         tuple[z3.BoolRef, z3.BoolRef]: The antecedent and the proof goal.
     """
     if is_implies(A) and is_atom(get_children(A)[1]):
+        print("here")
         return tuple(get_children(A))
     else:
         goal = FreshBool()
@@ -191,6 +192,7 @@ def instantiateLambda(lam):
 def isEquivToClausified(lam):
     formula = instantiateLambda(lam)
     clausified = clausify(formula)
+    print(clausified)
     solver = Solver()
     solver.add(formula == clausified)
     solver.add(Not(And(Implies(formula, clausified), Implies(clausified, formula))))
@@ -198,5 +200,5 @@ def isEquivToClausified(lam):
 
 
 if __name__ == "__main__":
-    # print(isEquivToClausified(prod_univ_prop_fwd))
+    print(isEquivToClausified(dbl_neg))
     pass
