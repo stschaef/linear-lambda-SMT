@@ -19,8 +19,19 @@ def clausify(A):
     R, X = [], []
     transform(A, R, X)
 
+    # print("R", R)
+    # print("X", X)
+
     # Reconstruct formula
     return Implies(And(R + X), goal)
+
+def RXGoal(A):
+    A, goal = format_proof_goal(A)
+
+    # Recursively transform
+    R, X = [], []
+    transform(A, R, X)
+    return R, X, goal
 
 
 def format_proof_goal(A):
@@ -172,14 +183,20 @@ def is_implication_clause(A):
     a, b = get_children(ab)
     return is_atom(a) and is_atom(b)
 
+def instantiateLambda(lam):
+    vars = [FreshBool() for i in range(10)]
+    arg_count = lam.__code__.co_argcount
+    return lam(*(vars[:arg_count]))
 
-if __name__ == "__main__":
-    p, q, r, s, t = FreshBool(), FreshBool(), FreshBool(), FreshBool(), FreshBool()
-    formula = prod_univ_prop_fwd(p,q,r)
+def isEquivToClausified(lam):
+    formula = instantiateLambda(lam)
     clausified = clausify(formula)
-    print(clausified)
-
     solver = Solver()
     solver.add(formula == clausified)
     solver.add(Not(And(Implies(formula, clausified), Implies(clausified, formula))))
-    print(solver.check())
+    return(solver.check())
+
+
+if __name__ == "__main__":
+    # print(isEquivToClausified(prod_univ_prop_fwd))
+    pass

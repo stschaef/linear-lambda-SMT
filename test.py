@@ -1,4 +1,7 @@
 from z3 import *
+import clausify
+import intuit
+import unittest
 
 # Intuitionisitc propositional logic tests
 
@@ -18,8 +21,8 @@ dbl_neg_lem = lambda a : dbl_neg(lem(a))
 dbl_neg_gen_lem = lambda a , b : Implies(Implies(Or(a, Implies(a , b)), b), b)
 
 # coproduct univ prop
-case_fwd = lambda a, b : Implies(Implies(Or(a, b) , c), And(Implies(a, c), Implies(b , c)))
-case_rev = lambda a, b : Implies(And(Implies(a, c), Implies(b , c)), Implies(Or(a, b) , c))
+case_fwd = lambda a, b, c : Implies(Implies(Or(a, b) , c), And(Implies(a, c), Implies(b , c)))
+case_rev = lambda a, b, c : Implies(And(Implies(a, c), Implies(b , c)), Implies(Or(a, b) , c))
 
 prod_univ_prop_fwd = lambda a, b, c : Implies(Implies(a, And(b , c)), And(Implies(a , c), Implies(a, c)))
 prod_univ_prop_rev = lambda a, b, c : Implies(And(Implies(a , c), Implies(b, c)), Implies(a, And(b , c)))
@@ -91,3 +94,65 @@ big_curry = lambda a, b, c, d, e : \
       ),
       e
   )
+
+lambdas = \
+  [
+    ["neg", neg, False],
+    ["dbl_neg", dbl_neg, False],
+    ["dbl_neg_gen", dbl_neg_gen, False],
+    ["lem", lem, False],
+    ["neg_neg_to_dbl_neg", neg_neg_to_dbl_neg, True],
+    ["dbl_neg_to_neg_neg", dbl_neg_to_neg_neg, True],
+    ["trpl_neg", trpl_neg, False],
+    ["dbl_neg_lem", dbl_neg_lem, True],
+    ["dbl_neg_gen_lem", dbl_neg_gen_lem, True],
+    ["case_fwd", case_fwd, True],
+    ["case_rev", case_rev, True],
+    ["prod_univ_prop_fwd", prod_univ_prop_fwd, True],
+    ["prod_univ_prop_rev", prod_univ_prop_rev, True],
+    ["curry", curry, True],
+    ["uncurry", uncurry, True],
+    ["pierce", pierce, False],
+    ["pierce_to_lem", pierce_to_lem, True],
+    ["lem_to_pierce", lem_to_pierce, True],
+    ["explode", explode, True],
+    ["triple_neg_to_neg", triple_neg_to_neg, True],
+    ["demorgan_fwd", demorgan_fwd, True],
+    ["demorgan_rev", demorgan_rev, True],
+    ["demorgan2_fwd", demorgan2_fwd, True],
+    ["demorgan2_rev", demorgan2_rev, False],
+    ["contra_neg", contra_neg, True],
+    ["contra", contra, False],
+    ["weak", weak, True],
+    ["terminal", terminal, True],
+    ["test1", test1, True],
+    ["test2", test2, True],
+    ["big_curry", big_curry, True]]
+
+class ClausifyTests(unittest.TestCase):
+    pass
+
+class  ProvabilityTests(unittest.TestCase):
+    pass
+
+def ClausifyTestGen(f):
+    def test(self):
+        self.assertEqual(str(clausify.isEquivToClausified(f)), "unsat")
+    return test
+
+def ProvabilityTestGen(R, X, goal, b):
+    def test(self):
+        self.assertEqual(prove(R, X, goal), 'Yes' if b else 'No')
+    return test
+
+if __name__ == '__main__':
+    for t in lambdas:
+        clausify_test_name = 'test_equiv_clausify_%s' % t[0]
+        clausify_test = ClausifyTestGen(t[1])
+        setattr(ClausifyTests, clausify_test_name, clausify_test)
+
+        provability_test_name = 'test_%s' % t[0]
+        formula = clausify.instantiateLambda(t[1])
+        R, X, goal = clausify.RXGoal(formula)
+        provability_test = ProvabilityTestGen(R, X, goal, t[2])
+    unittest.main()
