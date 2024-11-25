@@ -61,6 +61,9 @@ def transform(formula, R, X):
         X (list[z3.BoolRef]): The list of implication clauses to populate.
     """
     # base cases
+    if not is_implies(formula):
+        formula = Implies(True, formula)
+    
     if is_flat_clause(formula):
         R.append(formula)
         return
@@ -68,9 +71,6 @@ def transform(formula, R, X):
     if is_implication_clause(formula):
         X.append(formula)
         return
-    
-    if not is_implies(formula):
-        raise Exception("Not an implication clause: " + str(formula))
     
     left, right = get_children(formula)
 
@@ -135,7 +135,7 @@ def transform(formula, R, X):
             A = a
         if not is_atom(B):
             b = FreshBool()
-            transform(Implies(b, B), R, X)
+            transform(Implies(B, b), R, X)
             B = b
         if not is_atom(right):
             c = FreshBool()
