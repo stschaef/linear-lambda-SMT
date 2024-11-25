@@ -45,7 +45,7 @@ def format_proof_goal(A):
         tuple[z3.BoolRef, z3.BoolRef]: The antecedent and the proof goal.
     """
     if is_implies(A) and is_atom(get_children(A)[1]):
-        print("here")
+        # print("here")
         return tuple(get_children(A))
     else:
         goal = FreshBool()
@@ -198,6 +198,14 @@ def isEquivToClausified(lam):
     solver.add(Not(And(Implies(formula, clausified), Implies(clausified, formula))))
     return(solver.check())
 
+def format_implication_clause(x):
+    assert(is_implication_clause(x))
+    imp, c = get_children(x)
+    a, b = get_children(imp)
+    return a, b, c
+
+def formatX(X):
+    return list(map(format_implication_clause, X))
 
 if __name__ == "__main__":
     print(isEquivToClausified(dbl_neg))
