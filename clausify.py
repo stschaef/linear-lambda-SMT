@@ -1,4 +1,4 @@
-from z3 import *
+from z3logic import *
 from test import *
 from warnings import warn
 
@@ -33,8 +33,8 @@ def format_proof_goal(A):
     Returns:
         tuple[z3.BoolRef, z3.BoolRef]: The antecedent and the proof goal.
     """
-    if is_implies(A) and is_atom(A.children()[1]):
-        return tuple(A.children())
+    if is_implies(A) and is_atom(get_children(A)[1]):
+        return tuple(get_children(A))
     else:
         goal = FreshBool()
         return Implies(A, goal), goal
@@ -61,13 +61,13 @@ def transform(formula, R, X):
     if not is_implies(formula):
         raise Exception("Not an implication clause: " + str(formula))
     
-    left, right = formula.children()
+    left, right = get_children(formula)
 
     # rewrite negation as A -> False
     if is_not(left):
-        left = Implies(left.children()[0], False)
+        left = Implies(get_children(left)[0], False)
     if is_not(right):
-        right = Implies(right.children()[0], False)
+        right = Implies(get_children(right)[0], False)
 
     # (A || B || ..) -> C     ->      c -> C, A -> c, B -> c, ..
     if is_or(left):
@@ -77,23 +77,23 @@ def transform(formula, R, X):
             transform(Implies(atom, right), R, X)
             right = atom
         
-        for A in left.children():
+        for A in get_children(left):
             transform(Implies(A, right), R, X)
 
     # a -> (A && B && ..)     ->      a -> A, a -> B, ..
     elif is_and(right):
-        for A in right.children():
+        for A in get_children(right):
             transform(Implies(left, A), R, X)
 
     # A -> (B -> C)     ->      (A && B) -> C
     elif is_implies(right):
-        B, C = right.children()
+        B, C = get_children(right)
         transform(Implies(And(left, B), C), R, X)
 
     # A -> (.. || B || ..)      ->      A -> (.. || b || ..), b -> B
     elif is_or(right):
         new_consequent = []
-        for B in right.children():
+        for B in get_children(right):
             if not is_atom(B):
                 b = FreshBool()
                 transform(Implies(b, B), R, X)
@@ -105,7 +105,7 @@ def transform(formula, R, X):
     # (.. && A && ..) -> B      ->      (.. && a && ..) -> B, A -> a
     elif is_and(left):
         new_antecedent = []
-        for A in left.children():
+        for A in get_children(left):
             if not is_atom(A):
                 a = FreshBool()
                 transform(Implies(A, a), R, X)
@@ -116,7 +116,7 @@ def transform(formula, R, X):
 
     # (A -> B) -> C     ->      (a -> b) -> c, a -> A, B -> b, c -> C
     elif is_implies(left):
-        A, B = left.children()
+        A, B = get_children(left)
 
         if not is_atom(A):
             a = FreshBool()
@@ -137,26 +137,21 @@ def transform(formula, R, X):
         raise Exception("No transformation rule applies: " + str(formula))
 
 
-def is_atom(A):
-    """Returns true if A is an atom."""
-    return not A.children()
-
-
 def is_flat_clause(A):
     """Returns true if A is in the form (a_1 && .. && a_n) -> (b_1 || .. || b_m), where m, n > 0."""
     if not is_implies(A):
         warn("is_flat_clause() was called with a non-implication formula")
         return False
     
-    left, right = A.children()
+    left, right = get_children(A)
 
     if not ((is_and(left) or is_atom(left)) and (is_or(right) or is_atom(right))):
         return False
 
-    for a in left.children():
+    for a in get_children(left):
         if not is_atom(a):
             return False
-    for b in right.children():
+    for b in get_children(right):
         if not is_atom(b):
             return False
     
@@ -169,12 +164,12 @@ def is_implication_clause(A):
         warn("is_implication_clause() was called with a non-implication formula")
         return False
 
-    ab, c = A.children()
+    ab, c = get_children(A)
     
     if not is_implies(ab) or not is_atom(c):
         return False
     
-    a, b = ab.children()
+    a, b = get_children(ab)
     return is_atom(a) and is_atom(b)
 
 
