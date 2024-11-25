@@ -1,5 +1,5 @@
 from z3 import *
-from test1 import *
+from test import *
 
 s = Solver()
 def satProve(s, A, q):
