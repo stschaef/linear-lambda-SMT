@@ -107,45 +107,6 @@ def Atom(name):
     return Bool(name)
 
 
-if __name__ == "__main__":
-    # Define atoms
-    a = Bool('a')
-    b = Bool('b')
-    c = Bool('c')
-    d = Bool('d')
-    e = Bool('e')
-    f = Bool('f')
-    g = Bool('g')
-
-    p = Bool('p')
-
-    q_atom = Bool('q_atom')  
-    r = Bool('r')
-    s_atom = Bool('s')  
-
-    # Flat clauses R
-    R = [
-      dbl_neg(a)
-    ]
-
-    # Implication clauses X
-    X = [
-    ]
-
-    # The goal is to prove 's'
-    q = c
-
-    # Run the prove function
-    result = prove(R, X, q)
-
-    # Output the result
-    if result[0] == 'Yes':
-        print("The formula is intuitionistically provable.")
-    elif result[0] == 'No':
-        print("The formula is not intuitionistically provable.")
-    else:
-        print("The result is unknown.")
-
 from z3 import *
 from test import *
 
@@ -166,7 +127,8 @@ def satProve(solver, A, q):
     assumptions = list(A) + [Not(q)]
     res = s.check(assumptions)
     if res == unsat:
-        proof = s.proof()
+        proof = None
+        # proof = s.proof()
         core = s.unsat_core()
         # Remove Not(q) from the core to get the assumptions actually used
         core_without_q = [a for a in core if not (eq(a, Not(q)))]
@@ -200,7 +162,7 @@ def intuitCheck(solver, X, M):
         if is_true(a_val) or is_true(b_val) or is_true(c_val):
             continue  # Skip this implication clause
         else:
-            # Build the set of assumptions A = M ∪ {a}
+            # Build the set of assumptions A = M \cup {a}
             A = set()
             for d in M.decls():
                 val = M[d]
@@ -217,7 +179,7 @@ def intuitCheck(solver, X, M):
                 # Remove 'a' from A_prime to get assumptions used
                 assumptions_used = set(A_prime)
                 assumptions_used.discard(a)
-                # Create new flat clause (assumptions_used) → c
+                # Create new flat clause (assumptions_used) \to c
                 if len(assumptions_used) == 0:
                     new_clause = c  # Implies(True, c) simplifies to c
                 else:
@@ -253,7 +215,7 @@ def prove(R, X, q):
     # Add all flat clauses to the solver
     for r in R:
         s.add(r)
-    # For each implication clause (a → b) → c, add the flat clause b → c
+    # For each implication clause (a \to b) \to c, add the flat clause b \to c
     for (a, b, c) in X:
         s.add(Implies(b, c))
     # Start the intuitionistic proving process
@@ -280,28 +242,35 @@ if __name__ == "__main__":
     d = Bool('d')
     e = Bool('e')
     f = Bool('f')
-    p = Bool('p')  # a → b
-    q_atom = Bool('q_atom')  # b → c
-    r = Bool('r')  # a → c
+    p = Bool('p')  # a \to b
+    q_atom = Bool('q_atom')  # b \to c
+    r = Bool('r')  # a \to c
     s_atom = Bool('s')  # Goal atom
 
+
+
+    formula = clausify.instantiateLambda(weak)
+
     # Flat clauses R
-    R = [
-        Implies(And(b6, b7), False),  
-        Implies(And(b8, b0), b9),
-        Implies(And(b9, b10), False),
-    ]
+    # R = [
+    # ]
 
-    # Implication clauses X
-    X = [   
-        (b0, False, b7),
-        (b0, False, b10),
-        (b6, b8, b5)
-    ]
+    # # # Implication clauses X
+    # X = [
+    #     (a, c , d),
+    #     (b, a , c)
+    # ]
+    # #
+    # # # The goal is to prove 's'
+    # q = d
 
-    # The goal is to prove 's'
-    q = b5
-
+    R, X, q = clausify.RXGoal(formula)
+    print("A", formula)
+    print("R", R)
+    print("X", X)
+    # X = clausify.formatX(X)
+    # print("formatted X", X)
+    print("q", q)
     # Run the prove function
     result = prove(R, X, q)
 
