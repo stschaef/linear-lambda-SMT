@@ -8,6 +8,11 @@ import unittest
 # TODO these aren't split into R and X,
 # so the formatting might need to change based on Bryan's code
 
+sym_conj = lambda a, b : Implies(And(a , b), And(b, a))
+sym_disj = lambda a, b : Implies(Or(a , b), Or(b, a))
+
+conj_to_disj = lambda a, b : Implies(And(a , b), Or(a, b))
+
 neg = lambda a : Implies(a , False)
 dbl_neg = lambda a : Implies(a , Implies(Implies(a , False), False))
 dbl_neg_gen = lambda a , b : Implies(a , Implies(Implies(a , b), b))
@@ -95,6 +100,7 @@ big_curry = lambda a, b, c, d, e : \
       e
   )
 
+# TODO add all lambdas to this list
 lambdas = \
   [
     ["neg", neg, False],
@@ -142,7 +148,7 @@ def ClausifyTestGen(f):
 
 def ProvabilityTestGen(R, X, goal, b):
     def test(self):
-        self.assertEqual(prove(R, X, goal), 'Yes' if b else 'No')
+        self.assertEqual(prove(R, clausify.formatX(X), goal), 'Yes' if b else 'No')
     return test
 
 if __name__ == '__main__':
