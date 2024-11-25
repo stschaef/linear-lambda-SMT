@@ -27,15 +27,19 @@ case_fwd = lambda a, b, c : Implies(Implies(Or(a, b) , c), And(Implies(a, c), Im
 case_rev = lambda a, b, c : Implies(And(Implies(a, c), Implies(b , c)), Implies(Or(a, b) , c))
 
 prod_univ_prop_fwd = lambda a, b, c : Implies(Implies(a, And(b , c)), And(Implies(a , c), Implies(a, c)))
-prod_univ_prop_rev = lambda a, b, c : Implies(And(Implies(a , c), Implies(b, c)), Implies(a, And(b , c)))
+prod_univ_prop_rev = \
+    lambda a, b, c : \
+    Implies(
+        And(Implies(a , b), Implies(a, c)),
+        Implies(a, And(b , c)))
 
 curry = lambda a, b, c : Implies(Implies(a, Implies(b, c)), Implies(And(a , b), c))
 uncurry = lambda a, b, c : Implies(Implies(And(a , b), c), Implies(a, Implies(b, c)))
 
 pierce = lambda a, b : Implies(Implies(Implies(a , b), a), a)
 
-pierce_to_lem = lambda a , b : Implies(lem(a), pierce(a, b))
-lem_to_pierce = lambda a , b : Implies(pierce(a, b), lem(a))
+pierce_from_lem = lambda a , b : Implies(lem(a), pierce(a, b))
+lem_from_pierce = lambda a , b : Implies(pierce(a, b), lem(a))
 
 explode = lambda a : Implies(False, a)
 
@@ -48,7 +52,7 @@ demorgan2_fwd = lambda a, b : Implies(Or(neg(a), neg(b)), neg(And(a, b)))
 demorgan2_rev = lambda a, b : Implies(neg(And(a,b)), Or(neg(a), neg(b))) # not provable
 
 contra_neg = lambda a , b : Implies(Implies(a , neg(b)), Implies(b, neg(a)))
-contra = lambda a , b : Implies(Implies(a , b), Implies(neg(b), neg(a))) # shouldn't be provable
+contra = lambda a , b : Implies(Implies(neg(a) , neg(b)), Implies(b, a)) # shouldn't be provable
 
 weak = lambda a , b : Implies(a , Implies(b , a))
 
@@ -99,38 +103,38 @@ big_curry = lambda a, b, c, d, e : \
 
 lambdas = \
   [
-    # ["neg", neg, False],
-    # ["dbl_neg_in", dbl_neg_in, True],
-    # ["dbl_neg_elim", dbl_neg_elim, False],
-    # ["dbl_neg_gen", dbl_neg_gen, True],
-    # ["lem", lem, False],
-    ["neg_neg_to_dbl_neg", neg_neg_to_dbl_neg, True],
-    ["dbl_neg_to_neg_neg", dbl_neg_to_neg_neg, True],
-    ["trpl_neg", trpl_neg, False],
-    ["dbl_neg_lem", dbl_neg_lem, True],
-    ["dbl_neg_gen_lem", dbl_neg_gen_lem, True],
-    ["case_fwd", case_fwd, True],
-    # ["case_rev", case_rev, True],
-    # ["prod_univ_prop_fwd", prod_univ_prop_fwd, True],
-    # ["prod_univ_prop_rev", prod_univ_prop_rev, True],
-    # ["curry", curry, True],
-    # ["uncurry", uncurry, True],
-    # ["pierce", pierce, False],
-    # ["pierce_to_lem", pierce_to_lem, True],
-    # ["lem_to_pierce", lem_to_pierce, True],
-    # ["explode", explode, True],
-    # ["triple_neg_to_neg", triple_neg_to_neg, True],
-    # ["demorgan_fwd", demorgan_fwd, True],
-    # ["demorgan_rev", demorgan_rev, True],
-    # ["demorgan2_fwd", demorgan2_fwd, True],
-    # ["demorgan2_rev", demorgan2_rev, False],
-    # ["contra_neg", contra_neg, True],
-    # ["contra", contra, False],
-    # ["weak", weak, True],
-    # ["terminal", terminal, True],
-    # ["test1", test1, True],
-    # ["test2", test2, True],
-    # ["big_curry", big_curry, True]
+    # ["neg", neg, False], # correct
+    # ["dbl_neg_in", dbl_neg_in, True], # correct
+    # ["dbl_neg_elim", dbl_neg_elim, False], # correct
+    # ["dbl_neg_gen", dbl_neg_gen, True], # correct
+    # ["lem", lem, False], # correct
+    # ["neg_neg_to_dbl_neg", neg_neg_to_dbl_neg, True], # correct
+    # ["dbl_neg_to_neg_neg", dbl_neg_to_neg_neg, True], # correct
+    # ["trpl_neg", trpl_neg, False], # correct
+    # ["dbl_neg_lem", dbl_neg_lem, True], # correct
+    # ["dbl_neg_gen_lem", dbl_neg_gen_lem, True], # correct
+    # ["case_fwd", case_fwd, True], # correct
+    # ["case_rev", case_rev, True], # correct
+    # ["prod_univ_prop_fwd", prod_univ_prop_fwd, True], # correct
+    # ["prod_univ_prop_rev", prod_univ_prop_rev, True], # correct
+    # ["curry", curry, True], # correct
+    # ["uncurry", uncurry, True], # correct
+    # ["pierce", pierce, False], # correct
+    # ["pierce_from_lem", pierce_from_lem, True], # correct
+    # ["lem_from_pierce", lem_from_pierce, False], # correct
+    # ["explode", explode, True], # correct
+    # ["triple_neg_to_neg", triple_neg_to_neg, True], # correct
+    # ["demorgan_fwd", demorgan_fwd, True], # correct
+    # ["demorgan_rev", demorgan_rev, True], # correct
+    # ["demorgan2_fwd", demorgan2_fwd, True], # correct
+    # ["demorgan2_rev", demorgan2_rev, False], # correct
+    # ["contra_neg", contra_neg, True], # correct
+    # ["contra", contra, False], # correct
+    # ["weak", weak, True], # correct
+    # ["terminal", terminal, True], # correct
+    # ["test1", test1, True], # correct
+    # ["test2", test2, True], # correct
+    # ["big_curry", big_curry, False] # correct
   ]
 
 class ClausifyTests(unittest.TestCase):
@@ -155,19 +159,19 @@ def ProvabilityTestGen(R, X, goal, b):
     return test
 
 if __name__ == '__main__':
-    # formula = clausify.instantiateLambda(dbl_neg_in)
-    # R, X, goal = clausify.RXGoal(formula)
-    # print(R, X, goal)
-    # print(intuit.prove(R, clausify.formatX(X), goal))
+    formula = clausify.instantiateLambda(lem_from_pierce)
+    R, X, goal = clausify.RXGoal(formula)
+    print(R, X, goal)
+    print(intuit.prove(R, clausify.formatX(X), goal))
 
-    for t in lambdas:
-        # clausify_test_name = 'test_equiv_clausify_%s' % t[0]
-        # clausify_test = ClausifyTestGen(t[1])
-        # setattr(ClausifyTests, clausify_test_name, clausify_test)
+    # for t in lambdas:
+    #     # clausify_test_name = 'test_equiv_clausify_%s' % t[0]
+    #     # clausify_test = ClausifyTestGen(t[1])
+    #     # setattr(ClausifyTests, clausify_test_name, clausify_test)
 
-        provability_test_name = 'test_%s' % t[0]
-        formula = clausify.instantiateLambda(t[1])
-        R, X, goal = clausify.RXGoal(formula)
-        provability_test = ProvabilityTestGen(R, X, goal, t[2])
-        setattr(ProvabilityTests, provability_test_name, provability_test)
-    unittest.main()
+    #     provability_test_name = 'test_%s' % t[0]
+    #     formula = clausify.instantiateLambda(t[1])
+    #     R, X, goal = clausify.RXGoal(formula)
+    #     provability_test = ProvabilityTestGen(R, X, goal, t[2])
+    #     setattr(ProvabilityTests, provability_test_name, provability_test)
+    # unittest.main()
