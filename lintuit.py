@@ -84,10 +84,17 @@ ll.add(
     ForAll(
         [Delta, B1, B2, Gamma],
         Implies(
-            Or(
-                entails(comma(Delta, B1), Gamma),
-                entails(comma(Delta, B2), Gamma),
-            ),
+            entails(comma(Delta, B2), Gamma),
+            entails(comma(Delta, amp(B1, B2)), Gamma),
+        ),
+    )
+)
+
+ll.add(
+    ForAll(
+        [Delta, B1, B2, Gamma],
+        Implies(
+            entails(comma(Delta, B1), Gamma),
             entails(comma(Delta, amp(B1, B2)), Gamma),
         ),
     )
@@ -126,10 +133,17 @@ ll.add(
     ForAll(
         [Delta, B1, B2, Gamma],
         Implies(
-            Or(
-                entails(Delta, comma(B1, Gamma)),
-                entails(Delta, comma(B2, Gamma)),
-            ),
+            entails(Delta, comma(B2, Gamma)),
+            entails(Delta, comma(oplus(B1, B2), Gamma)),
+        ),
+    )
+)
+
+ll.add(
+    ForAll(
+        [Delta, B1, B2, Gamma],
+        Implies(
+            entails(Delta, comma(B1, Gamma)),
             entails(Delta, comma(oplus(B1, B2), Gamma)),
         ),
     )
@@ -230,10 +244,10 @@ ll.add(
 
 print(ll.check())
 
-test_solver = Solver()
+# test_solver = Solver()
 
-test_solver.add(ll.assertions())
+# test_solver.add(ll.assertions())
 
-test_solver.add(Implies(entails(lpop(x,x), gamma), entails(lpop(x,x), comma(bot, gamma))))
+# test_solver.add(Implies(entails(lpop(x,x), gamma), entails(lpop(x,x), comma(bot, gamma))))
 
-print(test_solver.check())
+# print(test_solver.check())
