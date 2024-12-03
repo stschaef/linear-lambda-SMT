@@ -8,10 +8,24 @@ entails = Function("entails", F, F, BoolSort())
 tensor = Function("tensor", F, F, F)
 lpop = Function("lollipop", F, F, F)
 par = Function("par", F, F, F)  # For the ⅋ connective
-one, bottom, empty = Consts("one bottom empty", F)
+comma = Function('comma', F, F, F)
+
+
+# Variables
+x, y, z = Consts('x y z', F)
+delta = Const('delta', F)
+gamma = Const('gamma', F)
+delta1, delta2 = Consts('delta1 delta2', F)
+gamma1, gamma2 = Consts('gamma1 gamma2', F)
+B1, B2 = Consts('B1 B2', F)
 x, y, z, Gamma, Gamma1, Gamma2, Delta, Delta1, Delta2, B, B1, B2, zero, Top = Consts(
     "x y z Gamma Gamma1 Gamma2 Delta Delta1 Delta2 B B1 B2 zero Top", F
 )
+
+# Constants
+one = Const('1', F)
+bot = Const('⊥', F)
+empty = Const('empty', F)
 
 ## Identity Rules
 ll.add(ForAll([x], entails(x, x)))  # (i)
@@ -23,77 +37,37 @@ ll.add(
 
 ## Multiplicative Rules
 
-# 1L: From Δ ⊢ Γ, infer Δ,1 ⊢ Γ
-ll.add(
-    ForAll([Delta, Gamma], Implies(entails(Delta, Gamma), entails(tensor(Delta, one), Gamma)))
-)
+# Rule 1 (1L)
+ll.add(ForAll([delta, gamma], Implies(entails(delta, gamma), entails(comma(delta, one), gamma))))
 
-# 1R: ⊢ 1
+# Rule 2 (1R)
 ll.add(entails(empty, one))
 
-# ⊥L: ⊥ ⊢
-ll.add(entails(bottom, empty))
+# Rule 3 (⊥L)
+ll.add(entails(bot, empty))
 
-# ⊥R: From Δ ⊢ Γ, infer Δ ⊢ ⊥, Γ
-ll.add(
-    ForAll([Delta, Gamma], Implies(entails(Delta, Gamma), entails(Delta, tensor(bottom, Gamma))))
-)
+# Rule 4 (⊥R)
+ll.add(ForAll([delta, gamma], Implies(entails(delta, gamma), entails(delta, comma(bot, gamma)))))
 
-# ⊗L: From Δ, B1, B2 ⊢ Γ, infer Δ, B1⊗B2 ⊢ Γ
-ll.add(
-    ForAll(
-        [Delta, B1, B2, Gamma],
-        Implies(
-            entails(tensor(tensor(Delta, B1), B2), Gamma),
-            entails(tensor(Delta, tensor(B1, B2)), Gamma),
-        ),
-    )
-)
+# Rule 5 (⊗L)
+ll.add(ForAll([delta, gamma, B1, B2],
+              Implies(entails(comma(comma(delta, B1), B2), gamma),
+                      entails(comma(delta, tensor(B1, B2)), gamma))))
 
-# ⊗R: From Δ1 ⊢ B1, Γ1 and Δ2 ⊢ B2, Γ2, infer Δ1,Δ2 ⊢ B1⊗B2, Γ1,Γ2
-ll.add(
-    ForAll(
-        [Delta1, Delta2, B1, B2, Gamma1, Gamma2],
-        Implies(
-            And(
-                entails(Delta1, tensor(B1, Gamma1)),
-                entails(Delta2, tensor(B2, Gamma2)),
-            ),
-            entails(
-                tensor(Delta1, Delta2),
-                tensor(tensor(B1, B2), tensor(Gamma1, Gamma2)),
-            ),
-        ),
-    )
-)
+# Rule 6 (⊗R)
+ll.add(ForAll([delta1, delta2, gamma1, gamma2, B1, B2],
+              Implies(And(entails(delta1, comma(B1, gamma1)), entails(delta2, comma(B2, gamma2))),
+                      entails(comma(delta1, delta2), comma(tensor(B1, B2), comma(gamma1, gamma2))))))
 
-# ⅋L: From Δ1, B1 ⊢ Γ1 and Δ2, B2 ⊢ Γ2, infer Δ1,Δ2,B1⅋B2 ⊢ Γ1,Γ2
-ll.add(
-    ForAll(
-        [Delta1, Delta2, B1, B2, Gamma1, Gamma2],
-        Implies(
-            And(
-                entails(tensor(Delta1, B1), Gamma1),
-                entails(tensor(Delta2, B2), Gamma2),
-            ),
-            entails(
-                tensor(tensor(Delta1, Delta2), par(B1, B2)),
-                tensor(Gamma1, Gamma2),
-            ),
-        ),
-    )
-)
+# Rule 7 (⅋L)
+ll.add(ForAll([delta1, delta2, gamma1, gamma2, B1, B2],
+              Implies(And(entails(comma(delta1, B1), gamma1), entails(comma(delta2, B2), gamma2)),
+                      entails(comma(comma(delta1, delta2), par(B1, B2)), comma(gamma1, gamma2)))))
 
-# ⅋R: From Δ ⊢ B1, B2, Γ, infer Δ ⊢ B1⅋B2, Γ
-ll.add(
-    ForAll(
-        [Delta, B1, B2, Gamma],
-        Implies(
-            entails(Delta, tensor(tensor(B1, B2), Gamma)),
-            entails(Delta, tensor(par(B1, B2), Gamma)),
-        ),
-    )
-)
+# Rule 8 (⅋R)
+ll.add(ForAll([delta, gamma, B1, B2],
+              Implies(entails(delta, comma(B1, comma(B2, gamma))),
+                      entails(delta, comma(par(B1, B2), gamma)))))
 
 ### Additive Rules ###
 oplus = Function("oplus", F, F, F)
