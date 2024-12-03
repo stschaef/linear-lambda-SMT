@@ -74,10 +74,10 @@ oplus = Function("oplus", F, F, F)
 amp = Function("with", F, F, F)
 
 # 0L
-ll.add(ForAll([Delta, Gamma], entails(tensor(Delta, zero), Gamma)))
+ll.add(ForAll([Delta, Gamma], entails(comma(Delta, zero), Gamma)))
 
 # TR
-ll.add(ForAll([Delta, Gamma], entails(Delta, tensor(Top, Gamma))))
+ll.add(ForAll([Delta, Gamma], entails(Delta, comma(Top, Gamma))))
 
 # &L(i = 1,2)
 ll.add(
@@ -85,10 +85,10 @@ ll.add(
         [Delta, B1, B2, Gamma],
         Implies(
             Or(
-                entails(tensor(Delta, B1), Gamma),
-                entails(tensor(Delta, B2), Gamma),
+                entails(comma(Delta, B1), Gamma),
+                entails(comma(Delta, B2), Gamma),
             ),
-            entails(tensor(Delta, amp(B1, B2)), Gamma),
+            entails(comma(Delta, amp(B1, B2)), Gamma),
         ),
     )
 )
@@ -99,10 +99,10 @@ ll.add(
         [Delta, B1, B2, Gamma],
         Implies(
             And(
-                entails(Delta, tensor(B1, Gamma)),
-                entails(Delta, tensor(B2, Gamma)),
+                entails(Delta, comma(B1, Gamma)),
+                entails(Delta, comma(B2, Gamma)),
             ),
-            entails(Delta, tensor(amp(B1, B2), Gamma)),
+            entails(Delta, comma(amp(B1, B2), Gamma)),
         ),
     )
 )
@@ -113,10 +113,10 @@ ll.add(
         [Delta, B1, B2, Gamma],
         Implies(
             And(
-                entails(tensor(Delta, B1), Gamma),
-                entails(tensor(Delta, B2), Gamma),
+                entails(comma(Delta, B1), Gamma),
+                entails(comma(Delta, B2), Gamma),
             ),
-            entails(tensor(Delta, oplus(B1, B2)), Gamma),
+            entails(comma(Delta, oplus(B1, B2)), Gamma),
         ),
     )
 )
@@ -127,10 +127,10 @@ ll.add(
         [Delta, B1, B2, Gamma],
         Implies(
             Or(
-                entails(Delta, tensor(B1, Gamma)),
-                entails(Delta, tensor(B2, Gamma)),
+                entails(Delta, comma(B1, Gamma)),
+                entails(Delta, comma(B2, Gamma)),
             ),
-            entails(Delta, tensor(oplus(B1, B2), Gamma)),
+            entails(Delta, comma(oplus(B1, B2), Gamma)),
         ),
     )
 )
@@ -145,7 +145,7 @@ ll.add(
         [Delta, Gamma, B],
         Implies(
             entails(Delta, Gamma),
-            entails(tensor(Delta, em(B)), Gamma),
+            entails(comma(Delta, em(B)), Gamma),
         ),
     )
 )
@@ -155,8 +155,8 @@ ll.add(
     ForAll(
         [Delta, Gamma, B],
         Implies(
-            entails(tensor(Delta, tensor(em(B), em(B))), Gamma),
-            entails(tensor(Delta, em(B)), Gamma),
+            entails(comma(Delta, comma(em(B), em(B))), Gamma),
+            entails(comma(Delta, em(B)), Gamma),
         ),
     )
 )
@@ -166,8 +166,8 @@ ll.add(
     ForAll(
         [Delta, Gamma, B],
         Implies(
-            entails(tensor(Delta, B), Gamma),
-            entails(tensor(Delta, em(B)), Gamma),
+            entails(comma(Delta, B), Gamma),
+            entails(comma(Delta, em(B)), Gamma),
         ),
     )
 )
@@ -177,8 +177,8 @@ ll.add(
     ForAll(
         [Delta, Gamma, B],
         Implies(
-            entails(em(Delta), tensor(B, qm(Gamma))),
-            entails(em(Delta), tensor(em(B), qm(Gamma))),
+            entails(em(Delta), comma(B, qm(Gamma))),
+            entails(em(Delta), comma(em(B), qm(Gamma))),
         ),
     )
 )
@@ -189,7 +189,7 @@ ll.add(
         [Delta, Gamma, B],
         Implies(
             entails(Delta, Gamma),
-            entails(Delta, tensor(qm(B), Gamma)),
+            entails(Delta, comma(qm(B), Gamma)),
         ),
     )
 )
@@ -199,8 +199,8 @@ ll.add(
     ForAll(
         [Delta, Gamma, B],
         Implies(
-            entails(Delta, tensor(tensor(qm(B), qm(B)), Gamma)),
-            entails(Delta, tensor(qm(B), Gamma)),
+            entails(Delta, comma(comma(qm(B), qm(B)), Gamma)),
+            entails(Delta, comma(qm(B), Gamma)),
         ),
     )
 )
@@ -210,8 +210,8 @@ ll.add(
     ForAll(
         [Delta, Gamma, B],
         Implies(
-            entails(Delta, tensor(B, Gamma)),
-            entails(Delta, tensor(qm(B), Gamma)),
+            entails(Delta, comma(B, Gamma)),
+            entails(Delta, comma(qm(B), Gamma)),
         ),
     )
 )
@@ -221,8 +221,8 @@ ll.add(
     ForAll(
         [Delta, Gamma, B],
         Implies(
-            entails(tensor(em(Delta), B), qm(Gamma)),
-            entails(tensor(em(Delta), qm(B)), qm(Gamma)),
+            entails(comma(em(Delta), B), qm(Gamma)),
+            entails(comma(em(Delta), qm(B)), qm(Gamma)),
         ),
     )
 )
