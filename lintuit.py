@@ -34,7 +34,6 @@ ll.add(
         [x, y, z], entails(tensor(x, y), z) == entails(y, lpop(x, z))
     )
 )  # (c)
-
 ## Multiplicative Rules
 
 # Rule 1 (1L)
@@ -241,13 +240,10 @@ ll.add(
     )
 )
 
+test_solver = Solver()
+assertions = ll.assertions()
+test_solver.add(assertions)
+print(ll.check())
+ll.add(Not(ForAll([x], entails(tensor(x,empty), x))))
 
 print(ll.check())
-
-# test_solver = Solver()
-
-# test_solver.add(ll.assertions())
-
-# test_solver.add(Implies(entails(lpop(x,x), gamma), entails(lpop(x,x), comma(bot, gamma))))
-
-# print(test_solver.check())
