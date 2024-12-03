@@ -155,10 +155,11 @@ def ProvabilityTestGen(R, X, goal, b):
     return test
 
 if __name__ == '__main__':
-    formula = clausify.instantiateLambda(lem_to_pierce)
+    formula = clausify.instantiateLambda(weak)
     R, X, goal = clausify.RXGoal(formula)
-    print(R, X, goal)
-    print(intuit.prove(R, clausify.formatX(X), goal))
+    # print(R, X, goal)
+    # print(intuit.prove(R, clausify.formatX(X), goal))
+    print(intuit.LJTSatMain(R, clausify.formatX(X), goal))
 
     # for t in lambdas:
     #     # clausify_test_name = 'test_equiv_clausify_%s' % t[0]

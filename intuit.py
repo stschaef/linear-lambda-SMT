@@ -97,6 +97,61 @@ def intuitProve(solver, X, A, q):
         else:
             return ('Unknown', None)
 
+def intuitPR(solver, X, A, q):
+    result = satProve(solver, A, q)
+    if result[0] == 'Yes':
+        A_prime = result[1]
+        proof = result[2]
+        return ('Yes', A_prime, proof)
+    elif result[0] == 'No':
+        M = result[1]
+        for (a, b, c) in X:
+            # Evaluate a, b, c in the model M
+            if(type(a)!=bool):
+                a_val = M.evaluate(a)
+            else:
+                a_val = a
+            if(type(b)!=bool):
+                b_val = M.evaluate(b)
+            else:
+                b_val = b
+            if(type(c)!=bool):
+                c_val = M.evaluate(c)
+            else:
+                c_val = c
+            # Proceed only if a, b, c are not assigned True in M
+            if is_true(a_val) or is_true(b_val) or is_true(c_val):
+                continue  # Skip this implication clause
+            else:
+                # Build the set of assumptions A = M ∪ {a}
+                A = set()
+                for d in M.decls():
+                    val = M[d]
+                    if is_true(val):
+                        A.add(d())
+                A_old = A
+                A.add(a)
+                # Remove the current implication clause from X
+                X_minus_i = X.copy()
+                X_minus_i.remove((a, b, c))
+
+                result = intuitPR(solver, X_minus_i, A, b)
+
+                if result[0] == 'Yes':
+                    A_prime = result[1]
+                    # Remove 'a' from A_prime to get assumptions used
+                    assumptions_used = set(A_prime)
+                    assumptions_used.discard(a)
+                    # Create new flat clause (assumptions_used) → c
+                    if len(assumptions_used) == 0:
+                        new_clause = c  # Implies(True, c) simplifies to c
+                    else:
+                        new_clause = Implies(And(*assumptions_used), c)
+                    solver.add(new_clause)
+                    return intuitPR(solver, X, A_old, q)
+        return ('No', M)
+
+
 def prove(R, X, q):
     """
     Top-level procedure that initializes the solver, adds clauses, and starts the proof.
@@ -109,8 +164,122 @@ def prove(R, X, q):
     for (a, b, c) in X:
         s.add(Implies(b, c))
     # Start the intuitionistic proving process
-    result = intuitProve(s, X, set(), q)
+    # result = intuitProve(s, X, set(), q)
+    result = intuitPR(s, X, set(), q)
     return result
+
+def LJTSat(R, X, A, q, r, solver, R_0, X_0, q_0, Rs):
+    """
+    An extension of IntuitProve/IntuitPR that returns proofs
+
+    return in format,
+
+    "Proof" , proof tree, assumptions R, assumptions A
+    """
+    result = satProve(solver, A, q)
+    if result[0] == 'Yes':
+        A_prime = result[1]
+        return "Proof", \
+                ([([Rs , A_prime] , q, "|-cpl")], \
+                  ([Rs, X , A_prime], q, "=>") , "cpl"), \
+                Rs, A_prime
+    elif result[0] == 'No':
+        # countermodels
+        # Theta = dict()
+
+        M = result[1]
+        for (a, b, c) in X:
+            # Evaluate a, b, c in the model M
+            if(type(a)!=bool):
+                a_val = M.evaluate(a)
+            else:
+                a_val = a
+            if(type(b)!=bool):
+                b_val = M.evaluate(b)
+            else:
+                b_val = b
+            if(type(c)!=bool):
+                c_val = M.evaluate(c)
+            else:
+                c_val = c
+            # Proceed only if a, b, c are not assigned True in M
+            if is_true(a_val) or is_true(b_val) or is_true(c_val):
+                continue  # Skip this implication clause
+            else:
+                # Build the set of assumptions A = M ∪ {a}
+                A = set()
+                for d in M.decls():
+                    val = M[d]
+                    if is_true(val):
+                        A.add(d())
+                A_old = A
+                A.add(a)
+                # Remove the current implication clause from X
+                X_minus_i = X.copy()
+                X_minus_i.remove((a, b, c))
+
+                R_new = R | {Implies(b, c)}
+
+                r_new = r + [(a,b,c)]
+
+                result_ = LJTSat(R_new, X_minus_i, A, b, r_new, solver, R_0, X_0, q_0, Rs)
+                if result_ == None:
+                    # Theta[(a,b,c)] = result_
+                    continue
+                else:
+                    A_prime = result_[3]
+                    # Remove 'a' from A_prime to get assumptions used
+                    assumptions_used = set(A_prime)
+                    assumptions_used.discard(a)
+
+                    new_clause = None # phi tilde
+                    # Create new flat clause (assumptions_used) → c
+                    if len(assumptions_used) == 0:
+                        new_clause = c  # Implies(True, c) simplifies to c
+                    else:
+                        new_clause = Implies(And(*assumptions_used), c)
+
+                    solver.add(new_clause)
+                    Rs.add(new_clause)
+
+                    R_new_ = R | {new_clause}
+                    nextResult = LJTSat(R_new_, X, A, q, r, solver, R_0, X_0, q_0, Rs)
+
+                    if nextResult == None:
+                        return None
+                    else :
+                        proof = \
+                            ([
+                                ((result_[1], [R , result_[2], Implies(b,c), X_minus_i, result_[3]] , b, "=>"), ""), \
+                                ((result_[1], [R , nextResult[2], new_clause, X, nextResult[3]] , q, "=>"), ""), \
+                              ], \
+                            ([R, result_[2], nextResult[2], nextResult[3]], q, "=>") , "ljt")
+                        return "Proof", proof, \
+                           (result_[2] | nextResult[2]), nextResult[3]
+        return None
+
+def LJTSatMain(R_0, X_0, q_0):
+    R_0 = set(R_0)
+    Rs = set()
+    for r in R_0:
+        s.add(r)
+        Rs.add(r)
+    for (a, b, c) in X_0:
+        s.add(Implies(b, c))
+        Rs.add(Implies(b,c))
+    result = LJTSat(R_0, X_0, set(), q_0, [], s, R_0, X_0, q_0, Rs)
+    if result == None:
+        return None
+    else:
+        _, D, R, A = result
+        R_proofs = [ ([] , ([R_0, X_0] , r, "|-ipl")) for r in R ]
+        ans = (R_proofs + [([D] , ([R_0 , R , X_0] , q_0, "=>"))] , \
+            ([R_0, X_0], q_0, "=>"), "cut")
+        # pretty_print_tree(ans)
+        return ans
+
+
+
 
 # Example usage
 if __name__ == "__main__":
@@ -158,7 +327,8 @@ if __name__ == "__main__":
     q = b10
 
     # Run the prove function
-    result = prove(R, X, q)
+    # result = prove(R, X, q)
+    result = LJTSatMain(set(R), X, q)
 
     # Output the result and the proof
     if result[0] == 'Yes':
