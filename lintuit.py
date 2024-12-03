@@ -229,3 +229,11 @@ ll.add(
 
 
 print(ll.check())
+
+test_solver = Solver()
+
+test_solver.add(ll.assertions())
+
+test_solver.add(Implies(entails(lpop(x,x), gamma), entails(lpop(x,x), comma(bot, gamma))))
+
+print(test_solver.check())
