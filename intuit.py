@@ -168,6 +168,71 @@ def prove(R, X, q):
     result = intuitPR(s, X, set(), q)
     return result
 
+class Impl:
+    def __init__(self, ant, conseq):
+        self.ant = ant
+        self.conseq = conseq
+        self.normalize()
+
+    def normalize(self):
+        self.ant = [ p for p in self.ant if (p != [] and p != set())]
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return ",".join([ str(p) for p in self.ant ]) + " => " + str(self.conseq)
+
+def flatten(xss):
+    ans = []
+    for xs in xss:
+        if type(xs) != list and type(xs) != set:
+            ans.append(xs)
+        else:
+            for x in xs:
+                ans.append(x)
+    return ans
+
+
+class Proof:
+    def __init__(self, premises, conclusion, rule):
+        self.premises = premises
+        self.conclusion = conclusion
+        self.rule = rule
+        self.normalize()
+
+    def normalize(self):
+        if (type(self.premises) == list) :
+            self.premises = [ p for p in self.premises if (p != [] and p != set())]
+
+    def str_help(self, indent=0):
+        def ind(n):
+            return n * "  "
+        s = ind(indent) + "Proof\n"
+        s += ind(indent + 1) + "Conclusion:\n"
+        s += ind(indent + 2) + str(self.conclusion) + '\n'
+        s += ind(indent + 1) + "Rule: " + self.rule + '\n'
+        # premises are a collection of proofs
+        if type(self.premises) == list or type(self.premises) == type:
+            for p in flatten(self.premises):
+                s += ind(indent + 1)+ "Premise: " + "\n"
+                if type(p) == BoolRef :
+                    s += ind(indent + 2) + str(p) + '\n'
+                else:
+                    s += p.str_help(indent + 1) + '\n'
+        else: # premise is a proof
+            s += ind(indent + 1) + "Premise: " + "\n"
+            s += self.premises.str_help(indent + 1) + '\n'
+        return s
+
+    def __str__(self):
+        return self.str_help()
+
+    def __repr__(self):
+        return f"premises: {self.premises};conclusion: {self.conclusion};rule: {self.rule}"
+
+
+
 def LJTSat(R, X, A, q, r, solver, R_0, X_0, q_0, Rs):
     """
     An extension of IntuitProve/IntuitPR that returns proofs
@@ -179,13 +244,13 @@ def LJTSat(R, X, A, q, r, solver, R_0, X_0, q_0, Rs):
     result = satProve(solver, A, q)
     if result[0] == 'Yes':
         A_prime = result[1]
-        return "Proof", \
-                ([([Rs , A_prime] , q, "|-cpl")], \
-                  ([Rs, X , A_prime], q, "=>") , "cpl"), \
-                Rs, A_prime
+        pf = Proof(
+            Proof([Rs, A_prime], q, "|-cpl"),
+            Impl([Rs, X, A_prime], q),
+            "cpl"
+        )
+        return "Proof", pf, Rs, A_prime
     elif result[0] == 'No':
-        # countermodels
-        # Theta = dict()
 
         M = result[1]
         for (a, b, c) in X:
@@ -248,13 +313,13 @@ def LJTSat(R, X, A, q, r, solver, R_0, X_0, q_0, Rs):
                     if nextResult == None:
                         return None
                     else :
-                        proof = \
-                            ([
-                                ((result_[1], [R , result_[2], Implies(b,c), X_minus_i, result_[3]] , b, "=>"), ""), \
-                                ((result_[1], [R , nextResult[2], new_clause, X, nextResult[3]] , q, "=>"), ""), \
-                              ], \
-                            ([R, result_[2], nextResult[2], nextResult[3]], q, "=>") , "ljt")
-                        return "Proof", proof, \
+                        pf = Proof(
+                            [Proof(result_[1], Impl([R , result_[2], Implies(b,c), X_minus_i, result_[3]], b), ""),
+                             Proof(result_[1], Impl([R , nextResult[2], new_clause, X, nextResult[3]], q), "")],
+                            Impl([R, result_[2], nextResult[2], nextResult[3]], q),
+                            "ljt"
+                        )
+                        return "Proof", pf, \
                            (result_[2] | nextResult[2]), nextResult[3]
         return None
 
@@ -272,14 +337,10 @@ def LJTSatMain(R_0, X_0, q_0):
         return None
     else:
         _, D, R, A = result
-        R_proofs = [ ([] , ([R_0, X_0] , r, "|-ipl")) for r in R ]
-        ans = (R_proofs + [([D] , ([R_0 , R , X_0] , q_0, "=>"))] , \
-            ([R_0, X_0], q_0, "=>"), "cut")
-        # pretty_print_tree(ans)
+        R_proofs = [ Proof([R_0, X_0], r, "|-ipl") for r in R ]
+        prems = R_proofs + [Proof([D] , Impl([R_0, R, X_0], q_0), "")]
+        ans = Proof(prems, Impl([R_0, X_0], q_0), "cut")
         return ans
-
-
-
 
 # Example usage
 if __name__ == "__main__":
