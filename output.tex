@@ -1,0 +1,1120 @@
+% Proof of []-->[a->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp A}{
+  \infer[\Ax]{A \drv A}{}
+}
+\end{displaymath}
+
+% Proof of [a->b->c]-->[b->a->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{A \limp B \limp C \drv B \limp A \limp C}{
+  \infer[\RR{\limp}]{B, A \limp B \limp C \drv A \limp C}{
+    \infer[\LR{\limp}]{A, B, A \limp B \limp C \drv C}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\LR{\limp}]{B, B \limp C \drv C}{
+        \infer[\Ax]{B \drv B}{}
+        &
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a->b,b->c]-->[a->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{A \limp B, B \limp C \drv A \limp C}{
+  \infer[\LR{\limp}]{A, A \limp B, B \limp C \drv C}{
+    \infer[\Ax]{A \drv A}{}
+    &
+    \infer[\LR{\limp}]{B, B \limp C \drv C}{
+      \infer[\Ax]{B \drv B}{}
+      &
+      \infer[\Ax]{C \drv C}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a/\b]-->[a]
+\begin{displaymath}
+\infer[\LR{\dprod_{1}}]{A \dprod B \drv A}{
+  \infer[\Ax]{A \drv A}{}
+}
+\end{displaymath}
+
+% Proof of [a/\b]-->[b]
+\begin{displaymath}
+\infer[\LR{\dprod_{2}}]{A \dprod B \drv B}{
+  \infer[\Ax]{B \drv B}{}
+}
+\end{displaymath}
+
+% Proof of [(a->b)/\(a->c)]-->[a->b/\c]
+\begin{displaymath}
+\infer[\RR{\limp}]{(A \limp B) \dprod (A \limp C) \drv A \limp B \dprod C}{
+  \infer[\RR{\dprod}]{A, (A \limp B) \dprod (A \limp C) \drv B \dprod C}{
+    \infer[\LR{\dprod_{1}}]{A, (A \limp B) \dprod (A \limp C) \drv B}{
+      \infer[\LR{\limp}]{A, A \limp B \drv B}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\Ax]{B \drv B}{}
+      }
+    }
+    &
+    \infer[\LR{\dprod_{2}}]{A, (A \limp B) \dprod (A \limp C) \drv C}{
+      \infer[\LR{\limp}]{A, A \limp C \drv C}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a->b/\c]-->[(a->b)/\(a->c)]
+\begin{displaymath}
+\infer[\RR{\dprod}]{A \limp B \dprod C \drv (A \limp B) \dprod (A \limp C)}{
+  \infer[\RR{\limp}]{A \limp B \dprod C \drv A \limp B}{
+    \infer[\LR{\limp}]{A, A \limp B \dprod C \drv B}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\LR{\dprod_{1}}]{B \dprod C \drv B}{
+        \infer[\Ax]{B \drv B}{}
+      }
+    }
+  }
+  &
+  \infer[\RR{\limp}]{A \limp B \dprod C \drv A \limp C}{
+    \infer[\LR{\limp}]{A, A \limp B \dprod C \drv C}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\LR{\dprod_{2}}]{B \dprod C \drv C}{
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a->b->a*b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp B \limp A \tprod B}{
+  \infer[\RR{\limp}]{A \drv B \limp A \tprod B}{
+    \infer[\RR{\tprod}]{B, A \drv A \tprod B}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\Ax]{B \drv B}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a->b->c]-->[a*b->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{A \limp B \limp C \drv A \tprod B \limp C}{
+  \infer[\LR{\tprod}]{A \tprod B, A \limp B \limp C \drv C}{
+    \infer[\LR{\limp}]{A, B, A \limp B \limp C \drv C}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\LR{\limp}]{B, B \limp C \drv C}{
+        \infer[\Ax]{B \drv B}{}
+        &
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a*b->c]-->[a->b->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{A \tprod B \limp C \drv A \limp B \limp C}{
+  \infer[\RR{\limp}]{A, A \tprod B \limp C \drv B \limp C}{
+    \infer[\LR{\limp}]{B, A, A \tprod B \limp C \drv C}{
+      \infer[\RR{\tprod}]{B, A \drv A \tprod B}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\Ax]{B \drv B}{}
+      }
+      &
+      \infer[\Ax]{C \drv C}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a]-->[a\/b]
+\begin{displaymath}
+\infer[\RR{\dsum_{1}}]{A \drv A \dsum B}{
+  \infer[\Ax]{A \drv A}{}
+}
+\end{displaymath}
+
+% Proof of [b]-->[a\/b]
+\begin{displaymath}
+\infer[\RR{\dsum_{2}}]{B \drv A \dsum B}{
+  \infer[\Ax]{B \drv B}{}
+}
+\end{displaymath}
+
+% Proof of [(a->c)/\(b->c)]-->[a\/b->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{(A \limp C) \dprod (B \limp C) \drv A \dsum B \limp C}{
+  \infer[\LR{\dsum}]{A \dsum B, (A \limp C) \dprod (B \limp C) \drv C}{
+    \infer[\LR{\dprod_{1}}]{A, (A \limp C) \dprod (B \limp C) \drv C}{
+      \infer[\LR{\limp}]{A, A \limp C \drv C}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+    &
+    \infer[\LR{\dprod_{2}}]{B, (A \limp C) \dprod (B \limp C) \drv C}{
+      \infer[\LR{\limp}]{B, B \limp C \drv C}{
+        \infer[\Ax]{B \drv B}{}
+        &
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a\/b->c]-->[(a->c)/\(b->c)]
+\begin{displaymath}
+\infer[\RR{\dprod}]{A \dsum B \limp C \drv (A \limp C) \dprod (B \limp C)}{
+  \infer[\RR{\limp}]{A \dsum B \limp C \drv A \limp C}{
+    \infer[\LR{\limp}]{A, A \dsum B \limp C \drv C}{
+      \infer[\RR{\dsum_{1}}]{A \drv A \dsum B}{
+        \infer[\Ax]{A \drv A}{}
+      }
+      &
+      \infer[\Ax]{C \drv C}{}
+    }
+  }
+  &
+  \infer[\RR{\limp}]{A \dsum B \limp C \drv B \limp C}{
+    \infer[\LR{\limp}]{B, A \dsum B \limp C \drv C}{
+      \infer[\RR{\dsum_{2}}]{B \drv A \dsum B}{
+        \infer[\Ax]{B \drv B}{}
+      }
+      &
+      \infer[\Ax]{C \drv C}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[1]
+\begin{displaymath}
+\infer[\RR{\tunit}]{ \drv \tunit}{}
+\end{displaymath}
+
+% Proof of [1]-->[a->a]
+\begin{displaymath}
+\infer[\LR{\tunit}]{\tunit \drv A \limp A}{
+  \infer[\RR{\limp}]{ \drv A \limp A}{
+    \infer[\Ax]{A \drv A}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[bot->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv \dzero \limp A}{
+  \infer[\LR{\dzero}]{\dzero \drv A}{}
+}
+\end{displaymath}
+
+% Proof of []-->[a->top]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp \dunit}{
+  \infer[\RR{\dunit}]{A \drv \dunit}{}
+}
+\end{displaymath}
+
+% Proof of []-->[~0]
+\begin{displaymath}
+\infer[\RR{\lnot{}}]{ \drv \lnot{\tzero}}{
+  \infer[\LR{\tzero}]{\tzero \drv }{}
+}
+\end{displaymath}
+
+% Proof of []-->[a* ~a->0]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \tprod \lnot{A} \limp \tzero}{
+  \infer[\RR{\tzero}]{A \tprod \lnot{A} \drv \tzero}{
+    \infer[\LR{\tprod}]{A \tprod \lnot{A} \drv }{
+      \infer[\LR{\lnot{}}]{A, \lnot{A} \drv }{
+        \infer[\Ax]{A \drv A}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a]-->[~ ~a]
+\begin{displaymath}
+\infer[\RR{\lnot{}}]{A \drv \lnot{\lnot{A}}}{
+  \infer[\LR{\lnot{}}]{\lnot{A}, A \drv }{
+    \infer[\Ax]{A \drv A}{}
+  }
+}
+\end{displaymath}
+
+% Proof of [~ ~a]-->[a]
+\begin{displaymath}
+\infer[\LR{\lnot{}}]{\lnot{\lnot{A}} \drv A}{
+  \infer[\RR{\lnot{}}]{ \drv \lnot{A}, A}{
+    \infer[\Ax]{A \drv A}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a-> ~ ~a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp \lnot{\lnot{A}}}{
+  \infer[\RR{\lnot{}}]{A \drv \lnot{\lnot{A}}}{
+    \infer[\LR{\lnot{}}]{\lnot{A}, A \drv }{
+      \infer[\Ax]{A \drv A}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[~ ~a->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv \lnot{\lnot{A}} \limp A}{
+  \infer[\LR{\lnot{}}]{\lnot{\lnot{A}} \drv A}{
+    \infer[\RR{\lnot{}}]{ \drv \lnot{A}, A}{
+      \infer[\Ax]{A \drv A}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a-> ~b]-->[b-> ~a]
+\begin{displaymath}
+\infer[\RR{\limp}]{A \limp \lnot{B} \drv B \limp \lnot{A}}{
+  \infer[\RR{\lnot{}}]{B, A \limp \lnot{B} \drv \lnot{A}}{
+    \infer[\LR{\limp}]{A, B, A \limp \lnot{B} \drv }{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\LR{\lnot{}}]{B, \lnot{B} \drv }{
+        \infer[\Ax]{B \drv B}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a+b]-->[~a->b]
+\begin{displaymath}
+\infer[\RR{\limp}]{A \tsum B \drv \lnot{A} \limp B}{
+  \infer[\LR{\lnot{}}]{\lnot{A}, A \tsum B \drv B}{
+    \infer[\LR{\tsum}]{A \tsum B \drv A, B}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\Ax]{B \drv B}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [~a->b]-->[a+b]
+\begin{displaymath}
+\infer[\RR{\tsum}]{\lnot{A} \limp B \drv A \tsum B}{
+  \infer[\LR{\limp}]{\lnot{A} \limp B \drv A, B}{
+    \infer[\RR{\lnot{}}]{ \drv \lnot{A}, A}{
+      \infer[\Ax]{A \drv A}{}
+    }
+    &
+    \infer[\Ax]{B \drv B}{}
+  }
+}
+\end{displaymath}
+
+% Proof of [~a->b]-->[~ (~a* ~b)]
+\begin{displaymath}
+\infer[\RR{\lnot{}}]{\lnot{A} \limp B \drv \lnot{(\lnot{A} \tprod \lnot{B})}}{
+  \infer[\LR{\tprod}]{\lnot{A} \tprod \lnot{B}, \lnot{A} \limp B \drv }{
+    \infer[\LR{\lnot{}}]{\lnot{A}, \lnot{B}, \lnot{A} \limp B \drv }{
+      \infer[\LR{\lnot{}}]{\lnot{B}, \lnot{A} \limp B \drv A}{
+        \infer[\LR{\limp}]{\lnot{A} \limp B \drv B, A}{
+          \infer[\RR{\lnot{}}]{ \drv \lnot{A}, A}{
+            \infer[\Ax]{A \drv A}{}
+          }
+          &
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [~ (~a* ~b)]-->[~a->b]
+\begin{displaymath}
+\infer[\LR{\lnot{}}]{\lnot{(\lnot{A} \tprod \lnot{B})} \drv \lnot{A} \limp B}{
+  \infer[\RR{\limp}]{ \drv \lnot{A} \tprod \lnot{B}, \lnot{A} \limp B}{
+    \infer[\LR{\lnot{}}]{\lnot{A} \drv \lnot{A} \tprod \lnot{B}, B}{
+      \infer[\RR{\tprod}]{ \drv A, \lnot{A} \tprod \lnot{B}, B}{
+        \infer[\RR{\lnot{}}]{ \drv A, \lnot{A}}{
+          \infer[\Ax]{A \drv A}{}
+        }
+        &
+        \infer[\RR{\lnot{}}]{ \drv \lnot{B}, B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a*(b\/c)]-->[a*b\/a*c]
+\begin{displaymath}
+\infer[\LR{\tprod}]{A \tprod (B \dsum C) \drv A \tprod B \dsum A \tprod C}{
+  \infer[\LR{\dsum}]{A, B \dsum C \drv A \tprod B \dsum A \tprod C}{
+    \infer[\RR{\dsum_{1}}]{A, B \drv A \tprod B \dsum A \tprod C}{
+      \infer[\RR{\tprod}]{A, B \drv A \tprod B}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\Ax]{B \drv B}{}
+      }
+    }
+    &
+    \infer[\RR{\dsum_{2}}]{A, C \drv A \tprod B \dsum A \tprod C}{
+      \infer[\RR{\tprod}]{A, C \drv A \tprod C}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [a*b\/a*c]-->[a*(b\/c)]
+\begin{displaymath}
+\infer[\LR{\dsum}]{A \tprod B \dsum A \tprod C \drv A \tprod (B \dsum C)}{
+  \infer[\LR{\tprod}]{A \tprod B \drv A \tprod (B \dsum C)}{
+    \infer[\RR{\tprod}]{A, B \drv A \tprod (B \dsum C)}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\RR{\dsum_{1}}]{B \drv B \dsum C}{
+        \infer[\Ax]{B \drv B}{}
+      }
+    }
+  }
+  &
+  \infer[\LR{\tprod}]{A \tprod C \drv A \tprod (B \dsum C)}{
+    \infer[\RR{\tprod}]{A, C \drv A \tprod (B \dsum C)}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\RR{\dsum_{2}}]{C \drv B \dsum C}{
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [!a]-->[1/\a/\!a*!a]
+\begin{displaymath}
+\infer[\RR{\dprod}]{! A \drv \tunit \dprod A \dprod ! A \tprod ! A}{
+  \infer[\WR{!}]{! A \drv \tunit}{
+    \infer[\RR{\tunit}]{ \drv \tunit}{}
+  }
+  &
+  \infer[\RR{\dprod}]{! A \drv A \dprod ! A \tprod ! A}{
+    \infer[\LR{!}]{! A \drv A}{
+      \infer[\Ax]{A \drv A}{}
+    }
+    &
+    \infer[\CR{!}]{! A \drv ! A \tprod ! A}{
+      \infer[\RR{\tprod}]{! A, ! A \drv ! A \tprod ! A}{
+        \infer[\Ax]{! A \drv ! A}{}
+        &
+        \infer[\Ax]{! A \drv ! A}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [! (a/\b)]-->[!a*!b]
+\begin{displaymath}
+\infer[\CR{!}]{! (A \dprod B) \drv ! A \tprod ! B}{
+  \infer[\RR{\tprod}]{! (A \dprod B), ! (A \dprod B) \drv ! A \tprod ! B}{
+    \infer[\RR{!}]{! (A \dprod B) \drv ! A}{
+      \infer[\LR{!}]{! (A \dprod B) \drv A}{
+        \infer[\LR{\dprod_{1}}]{A \dprod B \drv A}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+    }
+    &
+    \infer[\RR{!}]{! (A \dprod B) \drv ! B}{
+      \infer[\LR{!}]{! (A \dprod B) \drv B}{
+        \infer[\LR{\dprod_{2}}]{A \dprod B \drv B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [!a*!b]-->[! (a/\b)]
+\begin{displaymath}
+\infer[\LR{\tprod}]{! A \tprod ! B \drv ! (A \dprod B)}{
+  \infer[\RR{!}]{! A, ! B \drv ! (A \dprod B)}{
+    \infer[\RR{\dprod}]{! A, ! B \drv A \dprod B}{
+      \infer[\WR{!}]{! A, ! B \drv A}{
+        \infer[\LR{!}]{! A \drv A}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+      &
+      \infer[\WR{!}]{! A, ! B \drv B}{
+        \infer[\LR{!}]{! B \drv B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [! (a/\b)]-->[!a/\!b]
+\begin{displaymath}
+\infer[\RR{\dprod}]{! (A \dprod B) \drv ! A \dprod ! B}{
+  \infer[\RR{!}]{! (A \dprod B) \drv ! A}{
+    \infer[\LR{!}]{! (A \dprod B) \drv A}{
+      \infer[\LR{\dprod_{1}}]{A \dprod B \drv A}{
+        \infer[\Ax]{A \drv A}{}
+      }
+    }
+  }
+  &
+  \infer[\RR{!}]{! (A \dprod B) \drv ! B}{
+    \infer[\LR{!}]{! (A \dprod B) \drv B}{
+      \infer[\LR{\dprod_{2}}]{A \dprod B \drv B}{
+        \infer[\Ax]{B \drv B}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [! (!a/\!b)]-->[! (a/\b)]
+\begin{displaymath}
+\infer[\RR{!}]{! (! A \dprod ! B) \drv ! (A \dprod B)}{
+  \infer[\RR{\dprod}]{! (! A \dprod ! B) \drv A \dprod B}{
+    \infer[\LR{!}]{! (! A \dprod ! B) \drv A}{
+      \infer[\LR{\dprod_{1}}]{! A \dprod ! B \drv A}{
+        \infer[\LR{!}]{! A \drv A}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+    }
+    &
+    \infer[\LR{!}]{! (! A \dprod ! B) \drv B}{
+      \infer[\LR{\dprod_{2}}]{! A \dprod ! B \drv B}{
+        \infer[\LR{!}]{! B \drv B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [! (a/\b)]-->[! (!a/\!b)]
+\begin{displaymath}
+\infer[\RR{!}]{! (A \dprod B) \drv ! (! A \dprod ! B)}{
+  \infer[\RR{\dprod}]{! (A \dprod B) \drv ! A \dprod ! B}{
+    \infer[\RR{!}]{! (A \dprod B) \drv ! A}{
+      \infer[\LR{!}]{! (A \dprod B) \drv A}{
+        \infer[\LR{\dprod_{1}}]{A \dprod B \drv A}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+    }
+    &
+    \infer[\RR{!}]{! (A \dprod B) \drv ! B}{
+      \infer[\LR{!}]{! (A \dprod B) \drv B}{
+        \infer[\LR{\dprod_{2}}]{A \dprod B \drv B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [!all(_646,a(_646))]-->[all(_646,!a(_646))]
+\begin{displaymath}
+\infer[\RR{\lall}]{! (\lall x.A(x)) \drv \lall x.! A(x)}{
+  \infer[\RR{!}]{! (\lall x.A(x)) \drv ! A(y)}{
+    \infer[\LR{!}]{! (\lall x.A(x)) \drv A(y)}{
+      \infer[\LR{\lall}]{\lall x.A(x) \drv A(y)}{
+        \infer[\Ax]{A(y) \drv A(y)}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [!all(_646,!a(_646))]-->[!all(_646,a(_646))]
+\begin{displaymath}
+\infer[\RR{!}]{! (\lall x.! A(x)) \drv ! (\lall x.A(x))}{
+  \infer[\RR{\lall}]{! (\lall x.! A(x)) \drv \lall x.A(x)}{
+    \infer[\LR{!}]{! (\lall x.! A(x)) \drv A(y)}{
+      \infer[\LR{\lall}]{\lall x.! A(x) \drv A(y)}{
+        \infer[\LR{!}]{! A(y) \drv A(y)}{
+          \infer[\Ax]{A(y) \drv A(y)}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [!all(_646,a(_646))]-->[!all(_646,!a(_646))]
+\begin{displaymath}
+\infer[\RR{!}]{! (\lall x.A(x)) \drv ! (\lall x.! A(x))}{
+  \infer[\RR{\lall}]{! (\lall x.A(x)) \drv \lall x.! A(x)}{
+    \infer[\RR{!}]{! (\lall x.A(x)) \drv ! A(y)}{
+      \infer[\LR{!}]{! (\lall x.A(x)) \drv A(y)}{
+        \infer[\LR{\lall}]{\lall x.A(x) \drv A(y)}{
+          \infer[\Ax]{A(y) \drv A(y)}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [1]-->[!top]
+\begin{displaymath}
+\infer[\LR{\tunit}]{\tunit \drv ! \dunit}{
+  \infer[\RR{!}]{ \drv ! \dunit}{
+    \infer[\RR{\dunit}]{ \drv \dunit}{}
+  }
+}
+\end{displaymath}
+
+% Proof of [!top]-->[1]
+\begin{displaymath}
+\infer[\WR{!}]{! \dunit \drv \tunit}{
+  \infer[\RR{\tunit}]{ \drv \tunit}{}
+}
+\end{displaymath}
+
+% Proof of [0]-->[~!top]
+\begin{displaymath}
+\infer[\RR{\lnot{}}]{\tzero \drv \lnot{! \dunit}}{
+  \infer[\WR{!}]{! \dunit, \tzero \drv }{
+    \infer[\LR{\tzero}]{\tzero \drv }{}
+  }
+}
+\end{displaymath}
+
+% Proof of [~!top]-->[0]
+\begin{displaymath}
+\infer[\RR{\tzero}]{\lnot{! \dunit} \drv \tzero}{
+  \infer[\LR{\lnot{}}]{\lnot{! \dunit} \drv }{
+    \infer[\RR{!}]{ \drv ! \dunit}{
+      \infer[\RR{\dunit}]{ \drv \dunit}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [? (a\/b)]-->[?a+ ?b]
+\begin{displaymath}
+\infer[\RR{\tsum}]{? (A \dsum B) \drv ? A \tsum ? B}{
+  \infer[\LR{?}]{? (A \dsum B) \drv ? A, ? B}{
+    \infer[\LR{\dsum}]{A \dsum B \drv ? A, ? B}{
+      \infer[\WR{?}]{A \drv ? A, ? B}{
+        \infer[\RR{?}]{A \drv ? A}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+      &
+      \infer[\WR{?}]{B \drv ? A, ? B}{
+        \infer[\RR{?}]{B \drv ? B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [?a+ ?b]-->[? (a\/b)]
+\begin{displaymath}
+\infer[\CR{?}]{? A \tsum ? B \drv ? (A \dsum B)}{
+  \infer[\LR{\tsum}]{? A \tsum ? B \drv ? (A \dsum B), ? (A \dsum B)}{
+    \infer[\LR{?}]{? A \drv ? (A \dsum B)}{
+      \infer[\RR{?}]{A \drv ? (A \dsum B)}{
+        \infer[\RR{\dsum_{1}}]{A \drv A \dsum B}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+    }
+    &
+    \infer[\LR{?}]{? B \drv ? (A \dsum B)}{
+      \infer[\RR{?}]{B \drv ? (A \dsum B)}{
+        \infer[\RR{\dsum_{2}}]{B \drv A \dsum B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [?a\/ ?b]-->[? (a\/b)]
+\begin{displaymath}
+\infer[\LR{\dsum}]{? A \dsum ? B \drv ? (A \dsum B)}{
+  \infer[\LR{?}]{? A \drv ? (A \dsum B)}{
+    \infer[\RR{?}]{A \drv ? (A \dsum B)}{
+      \infer[\RR{\dsum_{1}}]{A \drv A \dsum B}{
+        \infer[\Ax]{A \drv A}{}
+      }
+    }
+  }
+  &
+  \infer[\LR{?}]{? B \drv ? (A \dsum B)}{
+    \infer[\RR{?}]{B \drv ? (A \dsum B)}{
+      \infer[\RR{\dsum_{2}}]{B \drv A \dsum B}{
+        \infer[\Ax]{B \drv B}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [? (?a\/ ?b)]-->[? (a\/b)]
+\begin{displaymath}
+\infer[\LR{?}]{? (? A \dsum ? B) \drv ? (A \dsum B)}{
+  \infer[\LR{\dsum}]{? A \dsum ? B \drv ? (A \dsum B)}{
+    \infer[\LR{?}]{? A \drv ? (A \dsum B)}{
+      \infer[\RR{?}]{A \drv ? (A \dsum B)}{
+        \infer[\RR{\dsum_{1}}]{A \drv A \dsum B}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+    }
+    &
+    \infer[\LR{?}]{? B \drv ? (A \dsum B)}{
+      \infer[\RR{?}]{B \drv ? (A \dsum B)}{
+        \infer[\RR{\dsum_{2}}]{B \drv A \dsum B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [? (a\/b)]-->[? (?a\/ ?b)]
+\begin{displaymath}
+\infer[\LR{?}]{? (A \dsum B) \drv ? (? A \dsum ? B)}{
+  \infer[\LR{\dsum}]{A \dsum B \drv ? (? A \dsum ? B)}{
+    \infer[\RR{?}]{A \drv ? (? A \dsum ? B)}{
+      \infer[\RR{\dsum_{1}}]{A \drv ? A \dsum ? B}{
+        \infer[\RR{?}]{A \drv ? A}{
+          \infer[\Ax]{A \drv A}{}
+        }
+      }
+    }
+    &
+    \infer[\RR{?}]{B \drv ? (? A \dsum ? B)}{
+      \infer[\RR{\dsum_{2}}]{B \drv ? A \dsum ? B}{
+        \infer[\RR{?}]{B \drv ? B}{
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [exists(_646,?a(_646))]-->[?exists(_646,a(_646))]
+\begin{displaymath}
+\infer[\LR{\lexists}]{\lexists x.? A(x) \drv ? (\lexists x.A(x))}{
+  \infer[\LR{?}]{? A(y) \drv ? (\lexists x.A(x))}{
+    \infer[\RR{?}]{A(y) \drv ? (\lexists x.A(x))}{
+      \infer[\RR{\lexists}]{A(y) \drv \lexists x.A(x)}{
+        \infer[\Ax]{A(y) \drv A(y)}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [?exists(_646,a(_646))]-->[?exists(_646,?a(_646))]
+\begin{displaymath}
+\infer[\LR{?}]{? (\lexists x.A(x)) \drv ? (\lexists x.? A(x))}{
+  \infer[\LR{\lexists}]{\lexists x.A(x) \drv ? (\lexists x.? A(x))}{
+    \infer[\RR{?}]{A(y) \drv ? (\lexists x.? A(x))}{
+      \infer[\RR{\lexists}]{A(y) \drv \lexists x.? A(x)}{
+        \infer[\RR{?}]{A(y) \drv ? A(y)}{
+          \infer[\Ax]{A(y) \drv A(y)}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [?exists(_646,?a(_646))]-->[?exists(_646,a(_646))]
+\begin{displaymath}
+\infer[\LR{?}]{? (\lexists x.? A(x)) \drv ? (\lexists x.A(x))}{
+  \infer[\LR{\lexists}]{\lexists x.? A(x) \drv ? (\lexists x.A(x))}{
+    \infer[\LR{?}]{? A(y) \drv ? (\lexists x.A(x))}{
+      \infer[\RR{?}]{A(y) \drv ? (\lexists x.A(x))}{
+        \infer[\RR{\lexists}]{A(y) \drv \lexists x.A(x)}{
+          \infer[\Ax]{A(y) \drv A(y)}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp A}{
+  \infer[\Ax]{A \drv A}{}
+}
+\end{displaymath}
+
+% Proof of []-->[(a->b)->(b->c)->a->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv (A \limp B) \limp (B \limp C) \limp A \limp C}{
+  \infer[\RR{\limp}]{A \limp B \drv (B \limp C) \limp A \limp C}{
+    \infer[\RR{\limp}]{B \limp C, A \limp B \drv A \limp C}{
+      \infer[\LR{\limp}]{A, B \limp C, A \limp B \drv C}{
+        \infer[\LR{\limp}]{A, A \limp B \drv B}{
+          \infer[\Ax]{A \drv A}{}
+          &
+          \infer[\Ax]{B \drv B}{}
+        }
+        &
+        \infer[\Ax]{C \drv C}{}
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[(a->b->c)->b->a->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv (A \limp B \limp C) \limp B \limp A \limp C}{
+  \infer[\RR{\limp}]{A \limp B \limp C \drv B \limp A \limp C}{
+    \infer[\RR{\limp}]{B, A \limp B \limp C \drv A \limp C}{
+      \infer[\LR{\limp}]{A, B, A \limp B \limp C \drv C}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\LR{\limp}]{B, B \limp C \drv C}{
+          \infer[\Ax]{B \drv B}{}
+          &
+          \infer[\Ax]{C \drv C}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[((a->0)->0)->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv ((A \limp \tzero) \limp \tzero) \limp A}{
+  \infer[\LR{\limp}]{(A \limp \tzero) \limp \tzero \drv A}{
+    \infer[\RR{\limp}]{ \drv A \limp \tzero, A}{
+      \infer[\RR{\tzero}]{A \drv \tzero, A}{
+        \infer[\Ax]{A \drv A}{}
+      }
+    }
+    &
+    \infer[\LR{\tzero}]{\tzero \drv }{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a->b->a*b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp B \limp A \tprod B}{
+  \infer[\RR{\limp}]{A \drv B \limp A \tprod B}{
+    \infer[\RR{\tprod}]{B, A \drv A \tprod B}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\Ax]{B \drv B}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[(a->b->c)->a*b->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv (A \limp B \limp C) \limp A \tprod B \limp C}{
+  \infer[\RR{\limp}]{A \limp B \limp C \drv A \tprod B \limp C}{
+    \infer[\LR{\tprod}]{A \tprod B, A \limp B \limp C \drv C}{
+      \infer[\LR{\limp}]{A, B, A \limp B \limp C \drv C}{
+        \infer[\Ax]{A \drv A}{}
+        &
+        \infer[\LR{\limp}]{B, B \limp C \drv C}{
+          \infer[\Ax]{B \drv B}{}
+          &
+          \infer[\Ax]{C \drv C}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[1]
+\begin{displaymath}
+\infer[\RR{\tunit}]{ \drv \tunit}{}
+\end{displaymath}
+
+% Proof of []-->[1->a->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv \tunit \limp A \limp A}{
+  \infer[\LR{\tunit}]{\tunit \drv A \limp A}{
+    \infer[\RR{\limp}]{ \drv A \limp A}{
+      \infer[\Ax]{A \drv A}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a/\b->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \dprod B \limp A}{
+  \infer[\LR{\dprod_{1}}]{A \dprod B \drv A}{
+    \infer[\Ax]{A \drv A}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a/\b->b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \dprod B \limp B}{
+  \infer[\LR{\dprod_{2}}]{A \dprod B \drv B}{
+    \infer[\Ax]{B \drv B}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[(a->b)/\(a->c)->a->b/\c]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv (A \limp B) \dprod (A \limp C) \limp A \limp B \dprod C}{
+  \infer[\RR{\limp}]{(A \limp B) \dprod (A \limp C) \drv A \limp B \dprod C}{
+    \infer[\RR{\dprod}]{A, (A \limp B) \dprod (A \limp C) \drv B \dprod C}{
+      \infer[\LR{\dprod_{1}}]{A, (A \limp B) \dprod (A \limp C) \drv B}{
+        \infer[\LR{\limp}]{A, A \limp B \drv B}{
+          \infer[\Ax]{A \drv A}{}
+          &
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+      &
+      \infer[\LR{\dprod_{2}}]{A, (A \limp B) \dprod (A \limp C) \drv C}{
+        \infer[\LR{\limp}]{A, A \limp C \drv C}{
+          \infer[\Ax]{A \drv A}{}
+          &
+          \infer[\Ax]{C \drv C}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a->a\/b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp A \dsum B}{
+  \infer[\RR{\dsum_{1}}]{A \drv A \dsum B}{
+    \infer[\Ax]{A \drv A}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[b->a\/b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv B \limp A \dsum B}{
+  \infer[\RR{\dsum_{2}}]{B \drv A \dsum B}{
+    \infer[\Ax]{B \drv B}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[(a->c)/\(b->c)->a\/b->c]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv (A \limp C) \dprod (B \limp C) \limp A \dsum B \limp C}{
+  \infer[\RR{\limp}]{(A \limp C) \dprod (B \limp C) \drv A \dsum B \limp C}{
+    \infer[\LR{\dsum}]{A \dsum B, (A \limp C) \dprod (B \limp C) \drv C}{
+      \infer[\LR{\dprod_{1}}]{A, (A \limp C) \dprod (B \limp C) \drv C}{
+        \infer[\LR{\limp}]{A, A \limp C \drv C}{
+          \infer[\Ax]{A \drv A}{}
+          &
+          \infer[\Ax]{C \drv C}{}
+        }
+      }
+      &
+      \infer[\LR{\dprod_{2}}]{B, (A \limp C) \dprod (B \limp C) \drv C}{
+        \infer[\LR{\limp}]{B, B \limp C \drv C}{
+          \infer[\Ax]{B \drv B}{}
+          &
+          \infer[\Ax]{C \drv C}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a->top]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A \limp \dunit}{
+  \infer[\RR{\dunit}]{A \drv \dunit}{}
+}
+\end{displaymath}
+
+% Proof of []-->[bot->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv \dzero \limp A}{
+  \infer[\LR{\dzero}]{\dzero \drv A}{}
+}
+\end{displaymath}
+
+% Proof of []-->[all(_646,a(_646))->a(t)]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv (\lall x.A(x)) \limp A(t)}{
+  \infer[\LR{\lall}]{\lall x.A(x) \drv A(t)}{
+    \infer[\Ax]{A(t) \drv A(t)}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[a(t)->exists(_650,a(_650))]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv A(t) \limp (\lexists x.A(x))}{
+  \infer[\RR{\lexists}]{A(t) \drv \lexists x.A(x)}{
+    \infer[\Ax]{A(t) \drv A(t)}{}
+  }
+}
+\end{displaymath}
+
+% Proof of [!a,! (a->b)]-->[b]
+\begin{displaymath}
+\infer[\LR{!}]{! A, ! (A \limp B) \drv B}{
+  \infer[\LR{!}]{A, ! (A \limp B) \drv B}{
+    \infer[\LR{\limp}]{A, A \limp B \drv B}{
+      \infer[\Ax]{A \drv A}{}
+      &
+      \infer[\Ax]{B \drv B}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of [!a,!b]-->[a/\b]
+\begin{displaymath}
+\infer[\RR{\dprod}]{! A, ! B \drv A \dprod B}{
+  \infer[\WR{!}]{! A, ! B \drv A}{
+    \infer[\LR{!}]{! A \drv A}{
+      \infer[\Ax]{A \drv A}{}
+    }
+  }
+  &
+  \infer[\WR{!}]{! A, ! B \drv B}{
+    \infer[\LR{!}]{! B \drv B}{
+      \infer[\Ax]{B \drv B}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[b->!a->b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv B \limp ! A \limp B}{
+  \infer[\RR{\limp}]{B \drv ! A \limp B}{
+    \infer[\WR{!}]{! A, B \drv B}{
+      \infer[\Ax]{B \drv B}{}
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[(!a->!a->b)->!a->b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv (! A \limp ! A \limp B) \limp ! A \limp B}{
+  \infer[\RR{\limp}]{! A \limp ! A \limp B \drv ! A \limp B}{
+    \infer[\CR{!}]{! A, ! A \limp ! A \limp B \drv B}{
+      \infer[\LR{\limp}]{! A, ! A, ! A \limp ! A \limp B \drv B}{
+        \infer[\Ax]{! A \drv ! A}{}
+        &
+        \infer[\LR{\limp}]{! A, ! A \limp B \drv B}{
+          \infer[\Ax]{! A \drv ! A}{}
+          &
+          \infer[\Ax]{B \drv B}{}
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[! (a->b)->!a->!b]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv ! (A \limp B) \limp ! A \limp ! B}{
+  \infer[\RR{\limp}]{! (A \limp B) \drv ! A \limp ! B}{
+    \infer[\RR{!}]{! A, ! (A \limp B) \drv ! B}{
+      \infer[\LR{!}]{! A, ! (A \limp B) \drv B}{
+        \infer[\LR{!}]{A, ! (A \limp B) \drv B}{
+          \infer[\LR{\limp}]{A, A \limp B \drv B}{
+            \infer[\Ax]{A \drv A}{}
+            &
+            \infer[\Ax]{B \drv B}{}
+          }
+        }
+      }
+    }
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[!a->a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv ! A \limp A}{
+  \infer[\LR{!}]{! A \drv A}{
+    \infer[\Ax]{A \drv A}{}
+  }
+}
+\end{displaymath}
+
+% Proof of []-->[!a->!!a]
+\begin{displaymath}
+\infer[\RR{\limp}]{ \drv ! A \limp ! ! A}{
+  \infer[\RR{!}]{! A \drv ! ! A}{
+    \infer[\Ax]{! A \drv ! A}{}
+  }
+}
+\end{displaymath}
+
+% Proof of [!a]-->[!a]
+\begin{displaymath}
+\infer[\Ax]{! A \drv ! A}{}
+\end{displaymath}
+

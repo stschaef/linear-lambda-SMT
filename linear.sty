@@ -1,0 +1,74 @@
+%
+%  LaTeX Style file for Linear Logic
+%  by Naoyuki Tamura (tamura@kobe-u.ac.jp)
+%   2/15/1995
+%   5/23/1996 modified
+%   12/30/2020 modified
+%
+%  Linear Logic Connectives
+%
+% \usepackage{graphicx}
+% \usepackage{amssymb}
+%  
+% Girard Notation
+%
+\def\girardnotation{%
+  \def\drv{\;\vdash\;}%
+  \def\lnot##1{{\def\arg{##1}\ifx\arg\empty()\else\arg\fi}{}^{\bot}}%
+  \def\tprod{\otimes}%
+  % \def\tsum{\protect\raisebox{0.2ex}{$\wp$}}%
+  \def\tsum{\rotatebox[origin=c]{180}{\&}}%
+  \def\vartsum{\maltese}%
+  \def\tunit{{\bf 1}}%
+  \def\tzero{\bot}%
+  \def\dprod{\mathop{\&}}%
+  \def\dsum{\oplus}%
+  \def\dunit{\top}%
+  \def\dzero{{\bf 0}}%
+  \def\limp{\mathop{\multimap}}%
+  % \def\lall{{\textstyle\bigwedge}}%
+  % \def\lexists{{\textstyle\bigvee}}%
+  \def\lall{\forall}%
+  \def\lexists{\exists}%
+}
+%
+% Troelstra Notation
+%
+\def\troelstranotation{%
+  \def\drv{\;\Rightarrow\;}%
+  \def\lnot##1{\mathop{\sim}##1}%
+  \def\tprod{\star}%
+  \def\tsum{+}%
+  \def\tunit{{\bf 1}}%
+  \def\tzero{{\bf 0}}%
+  \def\dprod{\sqcap}%
+  \def\dsum{\sqcup}%
+  \def\dunit{\top}%
+  \def\dzero{\bot}%
+  \def\limp{\mathop{\multimap}}%
+  \def\lall{\forall}%
+  \def\lexists{\exists}%
+}
+%
+% Default is Troelstra's notation
+%
+\troelstranotation
+%
+% Rule names
+%
+\def\LX{{\rm LX}}
+\def\RX{{\rm RX}}
+\def\Cut{{\rm Cut}}
+\def\Ax{{\rm Ax}}
+\def\Axiom{{\rm Axiom}}
+\def\LR#1{{\rm L}#1}
+\def\RR#1{{\rm R}#1}
+\def\WR#1{{\rm W}#1}
+\def\CR#1{{\rm C}#1}
+\def\DR#1{{\rm D}#1}
+%
+% System Names
+%
+\def\CLL#1{\mbox{${\bf CLL}_{\rm #1}$}}
+\def\ILZ#1{\mbox{${\bf ILZ}_{\rm #1}$}}
+\def\ILL#1{\mbox{${\bf ILL}_{\rm #1}$}}
