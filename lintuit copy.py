@@ -3,6 +3,7 @@ from z3 import *
 import time
 ## Declarations
 ll = Solver()
+constraints = []
 F = DeclareSort("F")
 
 entails = Function("entails", F, F, BoolSort())
@@ -28,23 +29,23 @@ one = Const('1', F)
 bot = Const('⊥', F)
 empty = Const('empty', F)
 
-ll.add(ForAll([x], entails(one, star(x))))
-ll.add(ForAll([x], entails(tensor(x, star(x)), star(x))))
-ll.add(ForAll([x], entails(tensor(star(x), x), star(x))))
-ll.add(ForAll([x, y],
+constraints.append(ForAll([x], entails(one, star(x))))
+constraints.append(ForAll([x], entails(tensor(x, star(x)), star(x))))
+constraints.append(ForAll([x], entails(tensor(star(x), x), star(x))))
+constraints.append(ForAll([x, y],
     Implies(
         And(entails(one, y), entails(tensor(x, star(x)), y)),
         entails(star(x), y)
     )
 ))
-ll.add(ForAll([x, y],
+constraints.append(ForAll([x, y],
     Implies(
         And(entails(one, y), entails(tensor(star(x), x), y)),
         entails(star(x), y)
     )
 ))
 
-# ll.add(
+# constraints.append(
 #     ForAll(
 #         [x,y,z],
 #         entails(
@@ -54,7 +55,7 @@ ll.add(ForAll([x, y],
 #     )
 # )
 
-# ll.add(
+# constraints.append(
 #     ForAll(
 #         [x,y,z],
 #         entails(
@@ -64,7 +65,7 @@ ll.add(ForAll([x, y],
 #     )
 # )
 
-ll.add(
+constraints.append(
     ForAll(
         [x,y,z],
         entails(
@@ -73,7 +74,7 @@ ll.add(
         )
     )
 )
-ll.add(
+constraints.append(
     ForAll(
         [x,y,z],
         entails(
@@ -83,7 +84,7 @@ ll.add(
     )
 )
 
-ll.add(
+constraints.append(
     ForAll(
         [x,y,z],
         entails(
@@ -93,7 +94,7 @@ ll.add(
     )
 )
 
-ll.add(
+constraints.append(
     ForAll(
         [x,y,z],
         entails(
@@ -105,69 +106,69 @@ ll.add(
 
 
 ## Identity Rules
-ll.add(ForAll([x], entails(x, x)))  # (i)
+constraints.append(ForAll([x], entails(x, x)))  # (i)
 
 # transitivity
-ll.add(ForAll([x,y,z],
+constraints.append(ForAll([x,y,z],
     Implies(
         And(entails(x, y), entails(y,z)),
         entails(x, z)
     )))
 
 # lollipop
-ll.add(
+constraints.append(
     ForAll(
         [x, y, z], entails(tensor(x, y), z) == entails(y, lpop(x, z))
     )
 )
 
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(tensor(one, x), x)))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(tensor(x, one), x)))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(x, tensor(one, x))))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(x, tensor(x, one))))
 
 # Rule 6 (⊗R)
-ll.add(ForAll([delta1, delta2, B1, B2],
+constraints.append(ForAll([delta1, delta2, B1, B2],
     Implies(And(entails(delta1, B1), entails(delta2, B2)),
                 entails(tensor(delta1, delta2), tensor(B1, B2)))))
 
 # Rule 8 (⅋R)
-# ll.add(ForAll([delta, gamma, B1, B2],
+# constraints.append(ForAll([delta, gamma, B1, B2],
 #               Implies(entails(delta, comma(B1, comma(B2, gamma))),
 #                       entails(delta, comma(par(B1, B2), gamma)))))
 
 ### Additive Rules ###
 
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(oplus(zero, x), x)))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(oplus(x, zero), x)))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(x, oplus(zero, x))))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(x, oplus(x, zero))))
 
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(amp(Top, x), x)))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(amp(x, Top), x)))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(x, amp(Top, x))))
-ll.add(ForAll([x],
+constraints.append(ForAll([x],
     entails(x, amp(x, Top))))
 
 # 0L
-ll.add(ForAll([x], entails(zero, x)))
+constraints.append(ForAll([x], entails(zero, x)))
 
 # TR
-ll.add(ForAll([x], entails(x, Top))) 
+constraints.append(ForAll([x], entails(x, Top))) 
 
 # &R
-ll.add(
+constraints.append(
     ForAll(
         [Delta, B1, B2],
         Implies(
@@ -178,7 +179,7 @@ ll.add(
         )
     )
 )
-ll.add(
+constraints.append(
     ForAll(
         [Delta, B1, B2],
         Implies(
@@ -187,7 +188,7 @@ ll.add(
         )
     )
 )
-ll.add(
+constraints.append(
     ForAll(
         [Delta, B1, B2],
         Implies(
@@ -198,7 +199,7 @@ ll.add(
 )
 
 # (+)R(i = 1,2)
-ll.add(
+constraints.append(
     ForAll(
         [Delta, B1, B2],
         Implies(
@@ -208,7 +209,7 @@ ll.add(
     ),
 )
 
-ll.add(
+constraints.append(
     ForAll(
         [Delta, B1, B2],
         Implies(
@@ -218,7 +219,7 @@ ll.add(
     ),
 )
 
-ll.add(
+constraints.append(
     ForAll(
         [x,y,z,w],
         Implies(
@@ -235,12 +236,12 @@ ll.add(
 ### Exponential Rules ###
 # qm = Function("qm", F, F)
 
-# ll.add(ForAll([x], entails(x, em(x))))
-# ll.add(ForAll([x], entails(em(x), tensor(em(x), em(x)))))
-# ll.add(ForAll([x], entails(tensor(em(x), em(x)), em(x))))
+# constraints.append(ForAll([x], entails(x, em(x))))
+# constraints.append(ForAll([x], entails(em(x), tensor(em(x), em(x)))))
+# constraints.append(ForAll([x], entails(tensor(em(x), em(x)), em(x))))
 
 # !W
-# ll.add(
+# constraints.append(
 #     ForAll(
 #         [Delta, Gamma, B],
 #         Implies(
@@ -251,7 +252,7 @@ ll.add(
 # )
 
 # # !C
-# ll.add(
+# constraints.append(
 #     ForAll(
 #         [Delta, Gamma, B],
 #         Implies(
@@ -262,7 +263,7 @@ ll.add(
 # )
 
 # # !D
-# ll.add(
+# constraints.append(
 #     ForAll(
 #         [Delta, Gamma, B],
 #         Implies(
@@ -273,7 +274,7 @@ ll.add(
 # )
 
 # # !R
-# ll.add(
+# constraints.append(
 #     ForAll(
 #         [Delta, Gamma, B],
 #         Implies(
@@ -283,9 +284,9 @@ ll.add(
 #     )
 # )
 
-# ll.add(Not(entails(tensor(x,one), x))) # unsat
-# ll.add(Not(entails(one, lpop(x, x)))) # unsat
-# ll.add(Not(entails(x, star(x)))) # unsat
+# constraints.append(Not(entails(tensor(x,one), x))) # unsat
+# constraints.append(Not(entails(one, lpop(x, x)))) # unsat
+# constraints.append(Not(entails(x, star(x)))) # unsat
 def mkStr(l):
     if len(l) == 0:
         return one
@@ -293,14 +294,13 @@ def mkStr(l):
     # return tensor(mkStr(n - 1) ,tensor(x,y))
 
 s = mkStr([x,y] * 6)
-print(s)
 
-# ll.add(Not(entails(star(x), star(oplus(x, y)))))
-# ll.add(Not(entails(oplus(x,y), oplus(oplus(z, x), y))))
-# ll.add(Not(entails(s, star(tensor(x, y))))) # unsat up to n = 25
-# ll.add(Not(entails(mkStr(4), star(tensor(x, y)))))
-# ll.add(Not(entails(tensor(tensor(x , y), tensor(y,z)), tensor(x, tensor(y, tensor(y,z))))))
-# ll.add(Not(entails(star(tensor(x,x)), star(x))))
+# constraints.append(Not(entails(star(x), star(oplus(x, y)))))
+# constraints.append(Not(entails(oplus(x,y), oplus(oplus(z, x), y))))
+# constraints.append(Not(entails(s, star(tensor(x, y))))) # unsat up to n = 25
+# constraints.append(Not(entails(mkStr(4), star(tensor(x, y)))))
+# constraints.append(Not(entails(tensor(tensor(x , y), tensor(y,z)), tensor(x, tensor(y, tensor(y,z))))))
+# constraints.append(Not(entails(star(tensor(x,x)), star(x))))
 # print(ll.check())
 
 from test_regex import tests
@@ -320,9 +320,11 @@ for regex, cases in tests.items():
             continue
         print("\ttesting", case)
         ll_test = Solver()
-        ll_test.add(ll.assertions())
-        ll_test.add(Not(entails(str_to_ll(case), eval(regex))))
+        # ll_test.add(ll.assertions())
+        constraints.append(Not(entails(str_to_ll(case), eval(regex))))
+        ll_test.add(constraints)
         result = ll_test.check()
         print("\t", result)
+        constraints.remove(Not(entails(str_to_ll(case), eval(regex))))
     end = time.time()
     print("time taken:", end-start)

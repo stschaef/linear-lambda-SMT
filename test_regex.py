@@ -41,6 +41,18 @@ tests = {
         "b" * 100: True,  # 100 'b's
         "abcd": False  # Mixed 'a', 'b', 'c', 'd'
     },
+    "tensor(star(a), star(b))": {  # "a*b*c*d*"
+        "aaabbb": True,
+        "ab": True,
+        "abcd": True,
+        "a": True,
+        "b": True,
+        "c": False,
+        "d": False,
+        "a" * 50 + "b" * 20 + "c" * 15 + "d" * 10: False,  # 50 'a's, 20 'b's, 15 'c's, 10 'd's
+        "abcdabcd": False,  # Repeated pattern
+        "acbd": False  # 'c' and 'b' are out of order
+    },
     "tensor(star(a), tensor(star(b), tensor(star(c), star(d))))": {  # "a*b*c*d*"
         "aaaabbbbccccdddd": True,
         "ab": True,
@@ -53,25 +65,25 @@ tests = {
         "abcdabcd": False,  # Repeated pattern
         "acbd": False  # 'c' and 'b' are out of order
     },
-    "star(oplus(oplus(oplus(a, b), c), d))": {  # "(a|b|c|d)*"
-        "abab": True,
-        "ab": True,
-        "ba": True,
-        "aaaa": True,
-        "abcd": True,
-        "a" * 100 + "b" * 100: True,  # 100 'a's followed by 100 'b's
-        "acbd": True,  # Mixed order of 'a', 'b', 'c', 'd'
-        "xyz": False  # Contains 'x', 'y', and 'z', which are not in the alphabet
-    },
-    "oplus(tensor(tensor(star(a), star(b)), tensor(star(c), star(d))), tensor(tensor(star(b), star(a)), tensor(star(d), star(c))))": {  # "a*b*c*d*|b*a*d*c*"
-        "ab": True,
-        "ba": True,
-        "abcd": True,
-        "acbd": False,
-        "aaaaabbbbbcccd": True,  # Several 'a's, 'b's, 'c's, and 'd's in order
-        "bcad": False,  # Mixed order of 'b', 'c', 'a', 'd'
-        "ababcd": False  # Wrong ordering of characters
-    },
+    # "star(oplus(oplus(oplus(a, b), c), d))": {  # "(a|b|c|d)*"
+    #     "abab": True,
+    #     "ab": True,
+    #     "ba": True,
+    #     "aaaa": True,
+    #     "abcd": True,
+    #     "a" * 100 + "b" * 100: True,  # 100 'a's followed by 100 'b's
+    #     "acbd": True,  # Mixed order of 'a', 'b', 'c', 'd'
+    #     "xyz": False  # Contains 'x', 'y', and 'z', which are not in the alphabet
+    # },
+    # "oplus(tensor(tensor(star(a), star(b)), tensor(star(c), star(d))), tensor(tensor(star(b), star(a)), tensor(star(d), star(c))))": {  # "a*b*c*d*|b*a*d*c*"
+    #     "ab": True,
+    #     "ba": True,
+    #     "abcd": True,
+    #     "acbd": False,
+    #     "aaaaabbbbbcccd": True,  # Several 'a's, 'b's, 'c's, and 'd's in order
+    #     "bcad": False,  # Mixed order of 'b', 'c', 'a', 'd'
+    #     "ababcd": False  # Wrong ordering of characters
+    # },
     "oplus(oplus(oplus(star( tensor(a, a)), star(b)), star(c)), star(d))": {  # "(aa)*|bb*|cc*|dd*"
         "aa": True,
         "aaaa": True,

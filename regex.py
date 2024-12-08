@@ -1,5 +1,6 @@
 from z3 import *
 import re
+import time
 
 
 def mkStr(n):
@@ -69,6 +70,7 @@ def str_to_ll(s):
     return eval(s[0])+str_to_ll(s[1:])
 
 for regex, cases in tests.items():
+    start = time.time()
     print("testing", regex)
     for case, match in cases.items():
         # if not match:       # uncomment this to run tests with non-matching strings
@@ -81,3 +83,5 @@ for regex, cases in tests.items():
             print("yes")
         else:
             print("no")
+    end = time.time()
+    print("time taken:", end-start)
