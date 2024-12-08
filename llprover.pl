@@ -60,7 +60,7 @@
 :- op( 910, xfy, -> ).
 :- op( 500, xfy, [ +, /\, \/ ]).
 :- op( 400, xfy, * ).
-:- op( 300, fy,  [ ~, !, ? ]).
+:- op( 300, fy,  [ ~, !, ? , star ]).
 
 ll :-
 	writex('Linear Logic Prover ver 2.0 in Prolog'), nlx,
@@ -487,6 +487,19 @@ rule([ill,0], no,  r(*), S, [S1, S2], [r(N),r(N1),r(N2)]) :-
 	match(S1, ([X1]-->[Y11,[A],Y21])),
 	match(S2, ([X2]-->[Y12,[B],Y22])),
 	length(Y1, N), length(Y11, N1), length(Y12, N2).
+rule([ill,0], inv, l(star), S, [S1, S2], [l(N),l(N), l(N)]) :-
+	match(S,  ([X1,[star(A)],X2]-->[Y])),
+	match(S1, ([X1,[1],X2]-->[Y])),
+	match(S2, ([X1,[A*star(A)],X2]-->[Y])),
+	length(X1, N).
+rule([ill,0], no, r(star,1), S, [S1], [r(N)]) :-
+    match(S, ([X]-->[Y1,[star(_A)],Y2])),
+    match(S1, ([X]-->[Y1,[1],Y2])),
+    length(Y1, N).
+rule([ill,0], no, r(star,*), S, [S1], [r(N),r(N),r(N)]) :-
+    match(S, ([X]-->[Y1,[star(A)],Y2])),
+    match(S1, ([X]-->[Y1,[A*star(A)],Y2])),
+    length(Y1, N).
 rule([ill,0], inv, l(\/), S, [S1, S2], [l(N),l(N),l(N)]) :-
 	match(S,  ([X1,[A\/B],X2]-->[Y])),
 	match(S1, ([X1,[A],X2]-->[Y])),
