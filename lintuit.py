@@ -1,6 +1,6 @@
 ## Importing the z3 module
 from z3 import *
-
+import time
 ## Declarations
 ll = Solver()
 F = DeclareSort("F")

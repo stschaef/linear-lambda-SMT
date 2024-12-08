@@ -1,0 +1,60 @@
+from z3 import *
+import re
+
+def mkStr(n):
+    string = ""
+    for i in range(n):
+        string+="xyz"
+    string+="a"
+    return string
+
+string = mkStr(100)
+# print(string)
+is_match =  re.compile('(xyz)+(xyz)+(a)+').fullmatch(string)
+if is_match:
+    print(is_match.groups())
+else:
+    print("no")
+
+
+tests = [
+    # (regex, string, expected_boolean)
+    (r"hello*", "hello", True),
+    (r"hello", "hello world", False),
+    (r"Hello*", "hello", False),
+    # (r"\d+", "123456", True),
+    # (r"\d{5}", "12345", True),
+    # (r"\d{5}", "1234", False),
+    # (r"[A-Za-z0-9]+", "abc123XYZ", True),
+    # (r"[A-Za-z0-9]+", "abc-123", False),
+    # (r"^abc$", "abc", True),
+    # (r"^abc$", "ab", False),
+    # (r"\w+", "hello_world123", True),
+    # (r"\w+", "hello world", False),
+    # (r"\s+", "   ", True),
+    # (r"\S+", "   ", False),
+    # (r"(cat|dog)", "cat", True),
+    # (r"(cat|dog)", "cow", False),
+    # (r"(ab)(cd)?(ef)", "abef", True),
+    # (r"(ab)(cd)?(ef)", "abcdef", True),
+    (r"(a(bc)d)", "abcd", True),
+    # (r"ab(?=c)", "abc", True),
+    # (r"ab(?=c)", "abx", False),
+    # (r"abc(?!d)", "abcx", True),
+    # (r"abc(?!d)", "abcd", False),
+    # (r"^\w+$", "café", True),
+    # (r"[A-Z][a-z]{2,5}\d{2,4}", "Abc123", True),
+    # (r"[A-Z][a-z]{2,5}\d{2,4}", "Ab12", False),
+]
+
+for pattern, string, expected in tests:
+    regex = re.compile(pattern)
+    result = bool(regex.fullmatch(string))
+    print(f"Pattern: {pattern}, String: '{string}' => ")
+    if(result == expected):
+        print("yes")
+    else:
+        print("no")
+    # print(f"Pattern: {pattern}, String: '{string}' => "
+    #       f"{'Matched' if result else 'Did not match'}; "
+    #       f"Expected: {'Matched' if expected else 'Did not match'}")
