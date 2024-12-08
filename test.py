@@ -99,38 +99,38 @@ big_curry = lambda a, b, c, d, e : \
 
 lambdas = \
   [
-    # ["neg", neg, False],
-    # ["dbl_neg_in", dbl_neg_in, True],
-    # ["dbl_neg_elim", dbl_neg_elim, False],
-    # ["dbl_neg_gen", dbl_neg_gen, True],
-    # ["lem", lem, False],
-    # ["neg_neg_to_dbl_neg", neg_neg_to_dbl_neg, True],
-    # ["dbl_neg_to_neg_neg", dbl_neg_to_neg_neg, True],
-    # ["trpl_neg", trpl_neg, False],
-    # ["dbl_neg_lem", dbl_neg_lem, True],
-    # ["dbl_neg_gen_lem", dbl_neg_gen_lem, True],
-    # ["case_fwd", case_fwd, True],
-    # ["case_rev", case_rev, True],
-    # ["prod_univ_prop_fwd", prod_univ_prop_fwd, True],
-    # ["prod_univ_prop_rev", prod_univ_prop_rev, True],
-    # ["curry", curry, True],
-    # ["uncurry", uncurry, True],
-    # ["pierce", pierce, False],
-    # ["pierce_to_lem", pierce_to_lem, True],
-    # ["lem_to_pierce", lem_to_pierce, True],
+    ["neg", neg, False],
+    ["dbl_neg_in", dbl_neg_in, True],
+    ["dbl_neg_elim", dbl_neg_elim, False],
+    ["dbl_neg_gen", dbl_neg_gen, True],
+    ["lem", lem, False],
+    ["neg_neg_to_dbl_neg", neg_neg_to_dbl_neg, True],
+    ["dbl_neg_to_neg_neg", dbl_neg_to_neg_neg, True],
+    ["trpl_neg", trpl_neg, False],
+    ["dbl_neg_lem", dbl_neg_lem, True],
+    ["dbl_neg_gen_lem", dbl_neg_gen_lem, True],
+    ["case_fwd", case_fwd, True],
+    ["case_rev", case_rev, True],
+    ["prod_univ_prop_fwd", prod_univ_prop_fwd, True],
+    ["prod_univ_prop_rev", prod_univ_prop_rev, True],
+    ["curry", curry, True],
+    ["uncurry", uncurry, True],
+    ["pierce", pierce, False],
+    ["pierce_from_lem", pierce_from_lem, True],
+    ["lem_from_pierce", lem_from_pierce, True],
     ["explode", explode, True],
     ["triple_neg_to_neg", triple_neg_to_neg, True],
     ["demorgan_fwd", demorgan_fwd, True],
     ["demorgan_rev", demorgan_rev, True],
     ["demorgan2_fwd", demorgan2_fwd, True],
     ["demorgan2_rev", demorgan2_rev, False],
-    # ["contra_neg", contra_neg, True],
-    # ["contra", contra, False],
-    # ["weak", weak, True],
-    # ["terminal", terminal, True],
-    # ["test1", test1, True],
-    # ["test2", test2, True],
-    # ["big_curry", big_curry, True]
+    ["contra_neg", contra_neg, True],
+    ["contra", contra, False],
+    ["weak", weak, True],
+    ["terminal", terminal, True],
+    ["test1", test1, True],
+    ["test2", test2, True],
+    ["big_curry", big_curry, True]
   ]
 
 class ClausifyTests(unittest.TestCase):
@@ -155,9 +155,10 @@ def ProvabilityTestGen(R, X, goal, b):
     return test
 
 if __name__ == '__main__':
-    formula = clausify.instantiateLambda(lem_to_pierce)
+    formula = clausify.instantiateLambda(weak)
     R, X, goal = clausify.RXGoal(formula)
     print(R, X, goal)
+    print("\n")
     print(intuit.prove(R, clausify.formatX(X), goal))
 
     # for t in lambdas:

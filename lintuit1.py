@@ -10,6 +10,7 @@ lpop = Function('lollipop', F, F, F)
 oplus = Function("oplus", F, F, F)
 amp = Function("with", F, F, F)
 dual = Function('dual', F, F)
+em = Function("em", F, F)
 x, y, z, w, I, Top= Consts('x y z w I Top', F)
 
 # Given rules

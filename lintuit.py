@@ -19,8 +19,8 @@ gamma = Const('gamma', F)
 delta1, delta2 = Consts('delta1 delta2', F)
 gamma1, gamma2 = Consts('gamma1 gamma2', F)
 B1, B2 = Consts('B1 B2', F)
-x, y, z, Gamma, Gamma1, Gamma2, Delta, Delta1, Delta2, B, B1, B2, zero, Top = Consts(
-    "x y z Gamma Gamma1 Gamma2 Delta Delta1 Delta2 B B1 B2 zero Top", F
+x, y, z, Gamma, Gamma1, Gamma2, Delta, Delta1, Delta2, B, B1, B2, zero, Top, I = Consts(
+    "x y z Gamma Gamma1 Gamma2 Delta Delta1 Delta2 B B1 B2 zero Top I", F
 )
 
 # Constants
