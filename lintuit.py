@@ -43,7 +43,66 @@ ll.add(ForAll([x, y],
         entails(star(x), y)
     )
 ))
-# ll.add(ForAll([x], entails(tensor(star(x), x), star(x))))
+
+ll.add(
+    ForAll(
+        [x,y,z],
+        entails(
+            tensor(x,tensor(y,z)),
+            tensor(tensor(x,y), z)
+        )
+    )
+)
+
+ll.add(
+    ForAll(
+        [x,y,z],
+        entails(
+            tensor(tensor(x,y), z),
+            tensor(x,tensor(y,z))
+        )
+    )
+)
+
+ll.add(
+    ForAll(
+        [x,y,z],
+        entails(
+            tensor(oplus(x,y), z),
+            oplus(tensor(x, z),tensor(y,z))
+        )
+    )
+)
+ll.add(
+    ForAll(
+        [x,y,z],
+        entails(
+            oplus(tensor(x, z),tensor(y,z)),
+            tensor(oplus(x,y), z),
+        )
+    )
+)
+
+ll.add(
+    ForAll(
+        [x,y,z],
+        entails(
+            tensor(x, oplus(y,z)),
+            oplus(tensor(x, y),tensor(x,z))
+        )
+    )
+)
+
+ll.add(
+    ForAll(
+        [x,y,z],
+        entails(
+            oplus(tensor(x, y),tensor(x,z)),
+            tensor(x, oplus(y,z)),
+        )
+    )
+)
+
 
 ## Identity Rules
 ll.add(ForAll([x], entails(x, x)))  # (i)
@@ -60,8 +119,7 @@ ll.add(
     ForAll(
         [x, y, z], entails(tensor(x, y), z) == entails(y, lpop(x, z))
     )
-)  # (c)
-## Multiplicative Rules
+)
 
 ll.add(ForAll([x],
     entails(tensor(one, x), x)))
@@ -228,12 +286,19 @@ ll.add(
 # ll.add(Not(entails(tensor(x,one), x))) # unsat
 # ll.add(Not(entails(one, lpop(x, x)))) # unsat
 # ll.add(Not(entails(x, star(x)))) # unsat
-def mkStr(n):
-    if n == 0:
+def mkStr(l):
+    if len(l) == 0:
         return one
-    # return tensor(tensor(x,y), mkStr(n - 1))
-    return tensor(mkStr(n - 1) ,tensor(x,y))
+    return tensor(l[0], mkStr(l[1:]))
+    # return tensor(mkStr(n - 1) ,tensor(x,y))
 
-ll.add(Not(entails(mkStr(5), star(tensor(x, y))))) # unsat up to n = 25
+s = mkStr([x,y] * 6)
+print(s)
+
+# ll.add(Not(entails(star(x), star(oplus(x, y)))))
+# ll.add(Not(entails(oplus(x,y), oplus(oplus(z, x), y))))
+ll.add(Not(entails(s, star(tensor(x, y))))) # unsat up to n = 25
+# ll.add(Not(entails(mkStr(4), star(tensor(x, y)))))
+# ll.add(Not(entails(tensor(tensor(x , y), tensor(y,z)), tensor(x, tensor(y, tensor(y,z))))))
 # ll.add(Not(entails(star(tensor(x,x)), star(x))))
 print(ll.check())
