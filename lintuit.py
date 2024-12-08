@@ -297,8 +297,29 @@ print(s)
 
 # ll.add(Not(entails(star(x), star(oplus(x, y)))))
 # ll.add(Not(entails(oplus(x,y), oplus(oplus(z, x), y))))
-ll.add(Not(entails(s, star(tensor(x, y))))) # unsat up to n = 25
+# ll.add(Not(entails(s, star(tensor(x, y))))) # unsat up to n = 25
 # ll.add(Not(entails(mkStr(4), star(tensor(x, y)))))
 # ll.add(Not(entails(tensor(tensor(x , y), tensor(y,z)), tensor(x, tensor(y, tensor(y,z))))))
 # ll.add(Not(entails(star(tensor(x,x)), star(x))))
-print(ll.check())
+# print(ll.check())
+
+from test_regex import tests
+
+a,b,c,d,e = Consts('a b c d e', F)
+
+def str_to_ll(s):
+    if len(s) < 2:
+        return eval(s)
+    return tensor(eval(s[0]), str_to_ll(s[1:]))
+
+for regex, cases in tests.items():
+    print("testing", regex)
+    for case, match in cases.items():
+        if not match:       # uncomment this to run tests with non-matching strings
+            continue
+        print("\ttesting", case)
+        ll_test = Solver()
+        ll_test.add(ll.assertions())
+        ll_test.add(Not(entails(str_to_ll(case), eval(regex))))
+        result = ll_test.check()
+        print("\t", result)
