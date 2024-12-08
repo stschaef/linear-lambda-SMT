@@ -41,7 +41,7 @@ tests = {
         "b" * 100: True,  # 100 'b's
         "abcd": False  # Mixed 'a', 'b', 'c', 'd'
     },
-    "tensor(star(a), star(b))": {  # "a*b*c*d*"
+    "tensor(star(a), star(b))": {  # "a*b*"
         "aaabbb": True,
         "ab": True,
         "abcd": True,
