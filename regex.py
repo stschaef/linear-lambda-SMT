@@ -1,6 +1,7 @@
 from z3 import *
 import re
 
+
 def mkStr(n):
     string = ""
     for i in range(n):
@@ -10,7 +11,7 @@ def mkStr(n):
 
 string = mkStr(100)
 # print(string)
-is_match =  re.compile('(xyz)+(xyz)+(a)+').fullmatch(string)
+is_match =  re.compile('a|b|c|d').fullmatch("a")
 if is_match:
     print(is_match.groups())
 else:
@@ -58,3 +59,25 @@ for pattern, string, expected in tests:
     # print(f"Pattern: {pattern}, String: '{string}' => "
     #       f"{'Matched' if result else 'Did not match'}; "
     #       f"Expected: {'Matched' if expected else 'Did not match'}")
+
+
+from test_regex_lib import tests
+
+def str_to_ll(s):
+    if len(s) < 2:
+        return eval(s)
+    return eval(s[0])+str_to_ll(s[1:])
+
+for regex, cases in tests.items():
+    print("testing", regex)
+    for case, match in cases.items():
+        # if not match:       # uncomment this to run tests with non-matching strings
+        #     continue
+        print("\ttesting", case)
+        tmp = re.compile(regex)
+        result = bool(tmp.fullmatch(case))
+        print("\t", result)
+        if(result == match):
+            print("yes")
+        else:
+            print("no")

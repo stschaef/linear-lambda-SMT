@@ -13,7 +13,7 @@ def one():
 
 # Updated tests with the linear logic representations
 tests = {
-    "oplus(oplus(oplus(a, b), c), d)": {  # "a|b|c|d"
+    "a|b|c|d": {  # "a|b|c|d"
         "a": True,
         "b": True,
         "c": True,
@@ -24,7 +24,7 @@ tests = {
         "a" * 100: False,  # 100 'a's
         "bbbbbbbbb": False  # 9 'b's
     },
-    "star(a)": {  # "a*"
+    "a*": {  # "a*"
         "aaa": True,
         "a": True,
         "b": False,
@@ -33,7 +33,7 @@ tests = {
         "a" * 100: True,  # 100 'a's
         "a" * 99 + "b": False  # 99 'a's followed by 'b'
     },
-    "star(b)": {  # "b*"
+    "b*": {  # "b*"
         "bbb": True,
         "b": True,
         "a": False,
@@ -41,7 +41,7 @@ tests = {
         "b" * 100: True,  # 100 'b's
         "abcd": False  # Mixed 'a', 'b', 'c', 'd'
     },
-    "tensor(star(a), tensor(star(b), tensor(star(c), star(d))))": {  # "a*b*c*d*"
+    "a*b*c*d*": {  # "a*b*c*d*"
         "aaaabbbbccccdddd": True,
         "ab": True,
         "abcd": True,
@@ -53,7 +53,7 @@ tests = {
         "abcdabcd": False,  # Repeated pattern
         "acbd": False  # 'c' and 'b' are out of order
     },
-    "star(oplus(oplus(oplus(a, b), c), d))": {  # "(a|b|c|d)*"
+    "(a|b|c|d)*": {  # "(a|b|c|d)*"
         "abab": True,
         "ab": True,
         "ba": True,
@@ -63,7 +63,7 @@ tests = {
         "acbd": True,  # Mixed order of 'a', 'b', 'c', 'd'
         "xyz": False  # Contains 'x', 'y', and 'z', which are not in the alphabet
     },
-    "oplus(tensor(tensor(star(a), star(b)), tensor(star(c), star(d))), tensor(tensor(star(b), star(a)), tensor(star(d), star(c))))": {  # "a*b*c*d*|b*a*d*c*"
+    "a*b*c*d*|b*a*d*c*": {  # "a*b*c*d*|b*a*d*c*"
         "ab": True,
         "ba": True,
         "abcd": True,
@@ -72,7 +72,7 @@ tests = {
         "bcad": False,  # Mixed order of 'b', 'c', 'a', 'd'
         "ababcd": False  # Wrong ordering of characters
     },
-    "oplus(oplus(oplus(star( tensor(a, a)), star(b)), star(c)), star(d))": {  # "(aa)*|bb*|cc*|dd*"
+    "(aa)*|bb*|cc*|dd*": {  # "(aa)*|bb*|cc*|dd*"
         "aa": True,
         "aaaa": True,
         "bb": True,
@@ -82,7 +82,7 @@ tests = {
         "abcd": False,  # Mixed characters
         "abab": False  # Incorrect pattern
     },
-    "oplus(a, tensor(star(oplus(b, star(oplus(c, d)))), star(oplus(d, b))))": {  # "a|(b|(c|d))*(d|b)*"
+    "a|(b|(c|d))*(d|b)*": {  # "a|(b|(c|d))*(d|b)*"
         "a": True,
         "b": True,
         "c": True,
